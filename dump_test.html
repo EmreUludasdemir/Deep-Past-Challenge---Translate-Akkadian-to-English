@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <title>Deep Past Challenge - Translate Akkadian to English | Kaggle</title>
+  <meta charset="utf-8">
+    <meta name="robots" content="index, follow">
+  <meta name="description" content="Bringing Bronze Age Voices Back to Life – Machine Translation of Old Assyrian Cuneiform">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0">
+  <meta name="theme-color" content="#008ABC">
+  <script src="https://apis.google.com/_/scs/abc-static/_/js/k=gapi.lb.tr.LfutriZ2c7k.O/m=auth2,client/rt=j/sv=1/d=1/ed=1/rs=AHpOoo8gL1M6VEvQyMw4Iqw9GsvOZWCKBQ/cb=gapi.loaded_0?le=scs,fedcm_migration_mod" nonce="" async=""></script><script nonce="" type="text/javascript">
+    window["pageRequestStartTime"] = 1770921619127;
+    window["pageRequestEndTime"] = 1770921619136;
+    window["initialPageLoadStartTime"] = new Date().getTime();
+  </script>
+  <script nonce="" id="gsi-client" src="https://accounts.google.com/gsi/client" async="" defer=""></script>
+  <script nonce="">window.KAGGLE_JUPYTERLAB_PATH = "/static/assets/jupyterlab-v4/jupyterlab-index-9b761e4af5965b27.html";</script>
+  <link rel="preconnect" href="https://www.google-analytics.com" crossorigin="anonymous"><link rel="preconnect" href="https://stats.g.doubleclick.net"><link rel="preconnect" href="https://storage.googleapis.com"><link rel="preconnect" href="https://apis.google.com">
+    <link href="/static/images/favicon.ico" rel="shortcut icon" type="image/x-icon" id="dynamic-favicon">
+  <link rel="manifest" href="/static/json/manifest.json" crossorigin="use-credentials">
+
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,400i,500,500i,600,600i,700,700i&amp;display=swap" rel="preload" as="style">
+  <link href="https://fonts.googleapis.com/css2?family=Google+Symbols:FILL@0..1&amp;display=block" rel="preload" as="style">
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,400i,500,500i,600,600i,700,700i&amp;display=swap" rel="stylesheet" media="all" id="async-google-font-1">
+  <link href="https://fonts.googleapis.com/css2?family=Google+Symbols:FILL@0..1&amp;display=block" rel="stylesheet" media="all" id="async-google-font-2">
+  <script nonce="" type="text/javascript">
+    const styleSheetIds = ["async-google-font-1", "async-google-font-2"];
+    styleSheetIds.forEach(function (id) {
+      document.getElementById(id).addEventListener("load", function() {
+        this.media = "all";
+      });
+    });
+  </script>
+
+
+    <link rel="stylesheet" type="text/css" href="/static/assets/app.css?v=a53f951c511cf82e">
+
+  
+    
+ 
+      <script nonce="">
+        try{(function(a,s,y,n,c,h,i,d,e){d=s.createElement("style");
+        d.appendChild(s.createTextNode(""));s.head.appendChild(d);d=d.sheet;
+        y=y.map(x => d.insertRule(x + "{ opacity: 0 !important }"));
+        h.start=1*new Date;h.end=i=function(){y.forEach(x => x<d.cssRules.length ? d.deleteRule(x) : {})};
+        (a[n]=a[n]||[]).hide=h;setTimeout(function(){i();h.end=null},c);h.timeout=c;
+        })(window,document,['.site-header-react__nav'],'dataLayer',2000,{'GTM-52LNT9S':true});}catch(ex){}
+    </script><style id="googleidentityservice_button_styles" nonce="">.qJTHM{-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;color:#202124;direction:ltr;-webkit-touch-callout:none;font-family:"Roboto-Regular",arial,sans-serif;-webkit-font-smoothing:antialiased;font-weight:400;margin:0;overflow:hidden;-webkit-text-size-adjust:100%}.ynRLnc{left:-9999px;position:absolute;top:-9999px}.L6cTce{display:none}.bltWBb{overflow-wrap:break-word;word-break:break-word}.hSRGPd{color:#1a73e8;cursor:pointer;font-weight:500;text-decoration:none}.Bz112c-W3lGp{height:16px;width:16px}.Bz112c-E3DyYd{height:20px;width:20px}.Bz112c-r9oPif{height:24px;width:24px}.Bz112c-u2z5K{height:36px;width:36px}.Bz112c-uaxL4e{border-radius:10px}.LgbsSe-Bz112c{display:block}.S9gUrf-YoZ4jf{border:none;margin:0;padding:0}.S9gUrf-YoZ4jf *{border:none;margin:0;padding:0}.fFW7wc-ibnC6b>.aZ2wEe>div{border-color:#4285f4}.P1ekSe-ZMv3u{-webkit-transition:height linear .2s;transition:height linear .2s}.P1ekSe-ZMv3u>div:nth-child(1){background-color:#1a73e8!important;-webkit-transition:width linear .3s;transition:width linear .3s}.P1ekSe-ZMv3u>div:nth-child(2){background-image:-webkit-gradient(linear,left top,right top,from(rgba(255,255,255,.7)),to(rgba(255,255,255,.7))),-webkit-gradient(linear,left top,right top,from(#1a73e8),to(#1a73e8))!important;background-image:-webkit-linear-gradient(left,rgba(255,255,255,.7),rgba(255,255,255,.7)),-webkit-linear-gradient(left,#1a73e8,#1a73e8)!important;background-image:linear-gradient(to right,rgba(255,255,255,.7),rgba(255,255,255,.7)),linear-gradient(to right,#1a73e8,#1a73e8)!important}.P1ekSe-ZMv3u>div:nth-child(3){background-image:-webkit-gradient(linear,left top,right top,from(rgba(255,255,255,.7)),to(rgba(255,255,255,.7))),-webkit-gradient(linear,left top,right top,from(#1a73e8),to(#1a73e8))!important;background-image:-webkit-linear-gradient(left,rgba(255,255,255,.7),rgba(255,255,255,.7)),-webkit-linear-gradient(left,#1a73e8,#1a73e8)!important;background-image:linear-gradient(to right,rgba(255,255,255,.7),rgba(255,255,255,.7)),linear-gradient(to right,#1a73e8,#1a73e8)!important}.haAclf{display:inline-block}.nsm7Bb-HzV7m-LgbsSe{border-radius:4px;box-sizing:border-box;-webkit-transition:background-color .218s,border-color .218s;transition:background-color .218s,border-color .218s;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;-webkit-appearance:none;background-color:#fff;background-image:none;border:1px solid #dadce0;color:#3c4043;cursor:pointer;font-family:"Google Sans",arial,sans-serif;font-size:14px;height:40px;letter-spacing:.25px;outline:none;overflow:hidden;padding:0 12px;position:relative;text-align:center;vertical-align:middle;white-space:nowrap;width:auto}@media screen and (-ms-high-contrast:active){.nsm7Bb-HzV7m-LgbsSe{border:2px solid windowText;color:windowText}}@media screen and (preferes-contrast:more){.nsm7Bb-HzV7m-LgbsSe{color:#000}}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe{font-size:14px;height:32px;letter-spacing:.25px;padding:0 10px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe{font-size:11px;height:20px;letter-spacing:.3px;padding:0 8px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe{padding:0;width:40px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.pSzOP-SxQuSe{width:32px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.purZT-SxQuSe{width:20px}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK{border-radius:20px}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK.pSzOP-SxQuSe{border-radius:16px}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK.purZT-SxQuSe{border-radius:10px}.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc{border:none;color:#fff}.nsm7Bb-HzV7m-LgbsSe.MFS4be-v3pZbf-Ia7Qfc{background-color:#1a73e8}.nsm7Bb-HzV7m-LgbsSe.MFS4be-JaPV2b-Ia7Qfc{background-color:#202124;color:#e8eaed}@media screen and (prefers-contrast:more){.nsm7Bb-HzV7m-LgbsSe.MFS4be-JaPV2b-Ia7Qfc{color:#fff}}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{height:18px;margin-right:8px;min-width:18px;width:18px}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{height:14px;min-width:14px;width:14px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{height:10px;min-width:10px;width:10px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-Bz112c{margin-left:8px;margin-right:-4px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{margin:0;padding:10px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.pSzOP-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{padding:8px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{padding:4px}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-top-left-radius:3px;border-bottom-left-radius:3px;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;align-items:center;background-color:#fff;height:36px;margin-left:-10px;margin-right:12px;min-width:36px;width:36px}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf .nsm7Bb-HzV7m-LgbsSe-Bz112c,.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf .nsm7Bb-HzV7m-LgbsSe-Bz112c{margin:0;padding:0}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{height:28px;margin-left:-8px;margin-right:10px;min-width:28px;width:28px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{height:16px;margin-left:-6px;margin-right:8px;min-width:16px;width:16px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:3px;margin-left:2px;margin-right:0;padding:0}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:18px}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:14px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:8px}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-bN97Pc-sM5MNb{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-align-items:center;-webkit-box-align:center;align-items:center;-webkit-flex-direction:row;-webkit-box-orient:horizontal;-webkit-box-direction:normal;flex-direction:row;-webkit-box-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;-webkit-flex-wrap:nowrap;flex-wrap:nowrap;height:100%;position:relative;width:100%}.nsm7Bb-HzV7m-LgbsSe .oXtfBe-l4eHX{-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-BPrWId{-webkit-flex-grow:1;-webkit-box-flex:1;flex-grow:1;font-family:"Google Sans",arial,sans-serif;font-weight:500;overflow:hidden;text-overflow:ellipsis;vertical-align:top}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-BPrWId{font-weight:300}.nsm7Bb-HzV7m-LgbsSe .oXtfBe-l4eHX .nsm7Bb-HzV7m-LgbsSe-BPrWId{-webkit-flex-grow:0;-webkit-box-flex:0;flex-grow:0}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-MJoBVe{-webkit-transition:background-color .218s;transition:background-color .218s;bottom:0;left:0;position:absolute;right:0;top:0}.nsm7Bb-HzV7m-LgbsSe:hover,.nsm7Bb-HzV7m-LgbsSe:focus{box-shadow:none;border-color:rgb(210,227,252);outline:none}.nsm7Bb-HzV7m-LgbsSe:focus-within{outline:2px solid #00639b;border-color:transparent}.nsm7Bb-HzV7m-LgbsSe:hover .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(66,133,244,.08)}.nsm7Bb-HzV7m-LgbsSe:active .nsm7Bb-HzV7m-LgbsSe-MJoBVe,.nsm7Bb-HzV7m-LgbsSe:focus .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(66,133,244,.1)}.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc:hover .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(255,255,255,.24)}.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc:active .nsm7Bb-HzV7m-LgbsSe-MJoBVe,.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc:focus .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(255,255,255,.32)}.nsm7Bb-HzV7m-LgbsSe .n1UuX-DkfjY{border-radius:50%;display:-webkit-box;display:-webkit-flex;display:flex;height:20px;margin-left:-4px;margin-right:8px;min-width:20px;width:20px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId{font-family:"Roboto";font-size:12px;text-align:left}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .ssJRIf,.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff .fmcmS{overflow:hidden;text-overflow:ellipsis}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-align-items:center;-webkit-box-align:center;align-items:center;color:#5f6368;fill:#5f6368;font-size:11px;font-weight:400}.nsm7Bb-HzV7m-LgbsSe.jVeSEe.MFS4be-Ia7Qfc .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff{color:#e8eaed;fill:#e8eaed}@media screen and (prefers-contrast:more){.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff,.nsm7Bb-HzV7m-LgbsSe.jVeSEe.MFS4be-Ia7Qfc .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff{color:#000;fill:#000}}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff .Bz112c{height:18px;margin:-3px -3px -3px 2px;min-width:18px;width:18px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-top-left-radius:0;border-bottom-left-radius:0;border-top-right-radius:3px;border-bottom-right-radius:3px;margin-left:12px;margin-right:-10px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:18px}.L5Fo6c-sM5MNb{border:0;display:block;left:0;position:relative;top:0}.L5Fo6c-bF1uUb{border-radius:4px;bottom:0;cursor:pointer;left:0;position:absolute;right:0;top:0}.L5Fo6c-bF1uUb:focus{border:none;outline:none}sentinel{}</style><style></style>
+    <script nonce="">
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-T7QHS60L4Q', {
+            'optimize_id': 'GTM-52LNT9S',
+            'displayFeaturesTask': null,
+            'send_page_view': false,
+            'content_group1': 'Competitions',
+            'user_properties': {
+                'logged_in': false,
+            }
+        });
+    </script>
+    <script nonce="" async="" src="https://www.googletagmanager.com/gtag/js?id=G-T7QHS60L4Q"></script>
+
+  
+  
+    
+    <meta property="og:title" content="Deep Past Challenge - Translate Akkadian to English">
+    <meta property="og:description" content="Bringing Bronze Age Voices Back to Life – Machine Translation of Old Assyrian Cuneiform">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kaggle.com/deep-past-initiative-machine-translation">
+
+        <meta property="og:image" content="https://kaggle.com/competitions/121150/images/header">
+        <meta property="twitter:image" content="https://kaggle.com/competitions/121150/images/header">
+    <meta property="twitter:title" content="Deep Past Challenge - Translate Akkadian to English">
+    <meta property="twitter:card" content="summary">
+    <meta property="twitter:site" content="@kaggle">
+
+
+
+
+  <meta name="twitter:site" content="@Kaggle"> 
+  
+    
+
+  
+    
+
+  
+    
+
+
+
+    <script nonce="">window['useKaggleAnalytics'] = true;</script>
+
+  <script id="gapi-target" nonce="" src="https://apis.google.com/js/api.js" defer="" async="" gapi_processed="true"></script>
+  <script nonce="" src="/static/assets/runtime.js?v=2c3ff658eb5f202c"></script>
+  <script nonce="" src="/static/assets/vendor.js?v=8757905ebf9ffb69"></script>
+  <script nonce="" src="/static/assets/app.js?v=e89d427d8521f629"></script><style id="_goober"> .go1475592160{height:0;}.go1671063245{height:auto;}.go1888806478{display:flex;flex-wrap:wrap;flex-grow:1;}@media (min-width:600px){.go1888806478{flex-grow:initial;min-width:288px;}}.go167266335{background-color:#313131;font-size:0.875rem;line-height:1.43;letter-spacing:0.01071em;color:#fff;align-items:center;padding:6px 16px;border-radius:4px;box-shadow:0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12);}.go3162094071{padding-left:20px;}.go3844575157{background-color:#313131;}.go1725278324{background-color:#43a047;}.go3651055292{background-color:#d32f2f;}.go4215275574{background-color:#ff9800;}.go1930647212{background-color:#2196f3;}.go946087465{display:flex;align-items:center;padding:8px 0;}.go703367398{display:flex;align-items:center;margin-left:auto;padding-left:16px;margin-right:-8px;}.go3963613292{width:100%;position:relative;transform:translateX(0);top:0;right:0;bottom:0;left:0;min-width:288px;}.go1141946668{box-sizing:border-box;display:flex;max-height:100%;position:fixed;z-index:1400;height:auto;width:auto;transition:top 300ms ease 0ms,right 300ms ease 0ms,bottom 300ms ease 0ms,left 300ms ease 0ms,max-width 300ms ease 0ms;pointer-events:none;max-width:calc(100% - 40px);}.go1141946668 .notistack-CollapseWrapper{padding:6px 0px;transition:padding 300ms ease 0ms;}@media (max-width:599.95px){.go1141946668{width:100%;max-width:calc(100% - 32px);}}.go3868796639 .notistack-CollapseWrapper{padding:2px 0px;}.go3118922589{top:14px;flex-direction:column;}.go1453831412{bottom:14px;flex-direction:column-reverse;}.go4027089540{left:20px;}@media (min-width:600px){.go4027089540{align-items:flex-start;}}@media (max-width:599.95px){.go4027089540{left:16px;}}.go2989568495{right:20px;}@media (min-width:600px){.go2989568495{align-items:flex-end;}}@media (max-width:599.95px){.go2989568495{right:16px;}}.go4034260886{left:50%;transform:translateX(-50%);}@media (min-width:600px){.go4034260886{align-items:center;}}</style>
+    <script nonce="" type="text/javascript">
+      window.kaggleStackdriverConfig = {
+        key: 'AIzaSyA4eNqUdRRskJsCZWVz-qL655Xa5JEMreE',
+        projectId: 'kaggle-161607',
+        service: 'web-fe',
+        version: 'ci',
+        userId: '0'
+      }
+    </script>
+<style data-styled="active" data-styled-version="6.1.19"></style><style data-emotion="css-global" data-s=""></style><style data-emotion="css-global" data-s=""></style><style data-emotion="css" data-s=""></style><link rel="stylesheet" type="text/css" href="/static/assets/7815.e94de944d22d175f.css"></head>
+<body style="background-color: rgb(255, 255, 255);">
+  <div id="root"><nav aria-label="Main Kaggle page navigation" class="sc-bjzMPS fmtRBJ"><div class="sc-fFrLqr hEHtyj"><div class="sc-ffIBOD dKRkqd"><div class="sc-eNLTQs jQRbPa"><button aria-label="Navigation menu" title="Navigation menu" class="sc-koBvLg bYJwBT google-symbols notranslate">menu</button></div><a href="#site-content" class="sc-JQDoe iXfHEZ">Skip to<br>content</a><div class="sc-jjDSqR kUUyDE"><a href="/" aria-label="Return to Kaggle home page"><img src="/static/images/site-logo.svg" alt="Kaggle" class="sc-iKHArB knPRjS"></a></div></div></div><div class="sc-dRpCaM fFdrMO"><button class="sc-fgnnHK bvKQJt"><svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;"><path fill-rule="evenodd" clip-rule="evenodd" d="M20 30L20 16L16 20L16 30L20 30Z" fill="#20BEFF"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M20 20L30 20L30 16L20 16L20 20Z" fill="#20BEFF"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M16 20L20 16L15.937 16L6 16L6 20L16 20Z" fill="#20BEFF"></path><rect x="20" y="16" width="4" height="10" transform="rotate(-180 20 16)" fill="#20BEFF"></rect></svg><span class="sc-hwddKA sc-jCfmij fbkSVc clKfrH">Create</span></button></div><div class="sc-inhABl YJLUi"><div class="sc-mqDxO esXNQe"><div class="sc-ouTEB ilGUXR"><div class="sc-bVnBcQ hHXlwG"><div class="sc-iXANDt LHFzk"><div class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root sc-fEETNT dQTfeE css-feqhe6"><div class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedStart css-omz4rr"><span class="google-symbols notranslate MuiIcon-root MuiIcon-fontSizeMedium sc-jytpVa bVaYPe notranslate css-1jgtvd5" aria-hidden="true" style="margin-right: 8px;">search</span><input aria-invalid="false" autocomplete="off" id=":r9:" placeholder="Search" type="text" class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedStart css-r1vfnz" value=""><fieldset aria-hidden="true" class="MuiOutlinedInput-notchedOutline css-igs3ac"><legend class="css-ihdtdm"><span class="notranslate">​</span></legend></fieldset></div></div></div></div><ul class="MuiList-root km-list css-1uzmcsd" role="list"><li class="MuiListItem-root MuiListItem-gutters sc-jkvfRO hwBMTA css-22wag7" aria-label="Home List Item"><div class="sc-eXVaYZ idRORJ sc-eUkiUm hwmgS km-listitem--small"><a aria-label="Home" tabindex="0" href="/" data-click-log-id="home" role="link" class="sc-fpikKz brCOKE"><div class="sc-jxYSNo eWhlcc"><div class="sc-zOxLx gBzEKy"><div class="sc-cgHfjM bOWpLD"><span class="google-symbols notranslate MuiIcon-root MuiIcon-fontSizeMedium sc-jytpVa hpjHTZ notranslate sc-jqchuL hfITES css-1jgtvd5" aria-hidden="true" title="Home" aria-label="Home">explore</span></div></div><div class="sc-kCuUfV sc-bjxVRI bXQAUF dEeLno"><p class="sc-dNdcvo cDXsBO" style="padding-left: 4px;">Home</p></div></div></a></div></li><li class="MuiListItem-root MuiListItem-gutters sc-jkvfRO hwBMTA css-22wag7" aria-label="Competitions List Item"><div class="sc-eXVaYZ kFGCxo sc-eUkiUm hwmgS km-listitem--small"><a aria-current="page" aria-label="Competitions" tabindex="0" href="/competitions" data-click-log-id="competitions" role="link" class="sc-fpikKz brCOKE"><div class="sc-jxYSNo eWhlcc"><div class="sc-zOxLx gBzEKy"><div class="sc-cgHfjM bOWpLD"><span class="google-symbols notranslate MuiIcon-root MuiIcon-fontSizeMedium sc-jytpVa bVaYPe notranslate sc-jqchuL hfITES css-1jgtvd5" aria-hidden="true" title="Competitions" aria-label="Competitions">emoji_events</span></div></div><div class="sc-kCuUfV sc-bjxVRI bXQAUF dEeLno"><p class="sc-dNdcvo ktDYxp" style="padding-left: 4px;">Competitions</p><div class="sc-eYRUSB glOaRS"></div></div></div></a></div></li><li class="MuiListItem-root MuiListItem-gutters sc-jkvfRO hwBMTA css-22wag7" aria-label="Datasets List Item"><div class="sc-eXVaYZ idRORJ sc-eUkiUm hwmgS km-listitem--small"><a aria-label="Datasets" tabindex="0" href="/datasets" data-click-log-id="datasets" role="link" class="sc-fpikKz brCOKE"><div class="sc-jxYSNo eWhlcc"><div class="sc-zOxLx gBzEKy"><div class="sc-cgHfjM bOWpLD"><span class="google-symbols notranslate MuiIcon-root MuiIcon-fontSizeMedium sc-jytpVa hpjHTZ notranslate sc-jqchuL hfITES css-1jgtvd5" aria-hidden="true" title="Datasets" aria-label="Datasets">table_chart</span></div></div><div class="sc-kCuUfV sc-bjxVRI bXQAUF dEeLno"><p class="sc-dNdcvo cDXsBO" style="padding-left: 4px;">Datasets</p></div></div></a></div></li><li class="MuiListItem-root MuiListItem-gutters sc-jkvfRO hwBMTA css-22wag7" aria-label="Models List Item"><div class="sc-eXVaYZ idRORJ sc-eUkiUm hwmgS km-listitem--small"><a aria-label="Models" tabindex="0" href="/models" data-click-log-id="models" role="link" class="sc-fpikKz brCOKE"><div class="sc-jxYSNo eWhlcc"><div class="sc-zOxLx gBzEKy"><div class="sc-cgHfjM bOWpLD"><span class="google-symbols notranslate MuiIcon-root MuiIcon-fontSizeMedium sc-jytpVa hpjHTZ notranslate sc-jqchuL hfITES css-1jgtvd5" aria-hidden="true" title="Models" aria-label="Models">tenancy</span></div></div><div class="sc-kCuUfV sc-bjxVRI bXQAUF dEeLno"><p class="sc-dNdcvo cDXsBO" style="padding-left: 4px;">Models</p></div></div></a></div></li><li class="MuiListItem-root MuiListItem-gutters sc-jkvfRO hwBMTA css-22wag7" aria-label="Benchmarks List Item"><div class="sc-eXVaYZ idRORJ sc-eUkiUm hwmgS km-listitem--small"><a aria-label="Benchmarks" tabindex="0" href="/benchmarks" data-click-log-id="benchmarks" role="link" class="sc-fpikKz brCOKE"><div class="sc-jxYSNo eWhlcc"><div class="sc-zOxLx gBzEKy"><div class="sc-cgHfjM bOWpLD"><span class="google-symbols notranslate MuiIcon-root MuiIcon-fontSizeMedium sc-jytpVa hpjHTZ notranslate sc-jqchuL hfITES css-1jgtvd5" aria-hidden="true" title="Benchmarks" aria-label="Benchmarks">leaderboard</span></div></div><div class="sc-kCuUfV sc-bjxVRI bXQAUF dEeLno"><p class="sc-dNdcvo cDXsBO" style="padding-left: 4px;">Benchmarks</p></div></div></a></div></li><li class="MuiListItem-root MuiListItem-gutters sc-jkvfRO hwBMTA css-22wag7" aria-label="Game Arena List Item"><div class="sc-eXVaYZ idRORJ sc-eUkiUm hwmgS km-listitem--small"><a aria-label="Game Arena" tabindex="0" href="/game-arena" data-click-log-id="game-arena" role="link" class="sc-fpikKz brCOKE"><div class="sc-jxYSNo eWhlcc"><div class="sc-zOxLx gBzEKy"><div class="sc-cgHfjM bOWpLD"><span class="google-symbols notranslate MuiIcon-root MuiIcon-fontSizeMedium sc-jytpVa hpjHTZ notranslate sc-jqchuL hfITES css-1jgtvd5" aria-hidden="true" title="Game Arena" aria-label="Game Arena">smart_toy</span></div></div><div class="sc-kCuUfV sc-bjxVRI bXQAUF dEeLno"><p class="sc-dNdcvo cDXsBO" style="padding-left: 4px;">Game Arena</p></div></div></a></div></li><li class="MuiListItem-root MuiListItem-gutters sc-jkvfRO hwBMTA css-22wag7" aria-label="Code List Item"><div class="sc-eXVaYZ idRORJ sc-eUkiUm hwmgS km-listitem--small"><a aria-label="Code" tabindex="0" href="/code" data-click-log-id="code" role="link" class="sc-fpikKz brCOKE"><div class="sc-jxYSNo eWhlcc"><div class="sc-zOxLx gBzEKy"><div class="sc-cgHfjM bOWpLD"><span class="google-symbols notranslate MuiIcon-root MuiIcon-fontSizeMedium sc-jytpVa hpjHTZ notranslate sc-jqchuL hfITES css-1jgtvd5" aria-hidden="true" title="Code" aria-label="Code">code</span></div></div><div class="sc-kCuUfV sc-bjxVRI bXQAUF dEeLno"><p class="sc-dNdcvo cDXsBO" style="padding-left: 4px;">Code</p></div></div></a></div></li><li class="MuiListItem-root MuiListItem-gutters sc-jkvfRO hwBMTA css-22wag7" aria-label="Discussions List Item"><div class="sc-eXVaYZ idRORJ sc-eUkiUm hwmgS km-listitem--small"><a aria-label="Discussions" tabindex="0" href="/discussions" data-click-log-id="discussions" role="link" class="sc-fpikKz brCOKE"><div class="sc-jxYSNo eWhlcc"><div class="sc-zOxLx gBzEKy"><div class="sc-cgHfjM bOWpLD"><span class="google-symbols notranslate MuiIcon-root MuiIcon-fontSizeMedium sc-jytpVa hpjHTZ notranslate sc-jqchuL hfITES css-1jgtvd5" aria-hidden="true" title="Discussions" aria-label="Discussions">comment</span></div></div><div class="sc-kCuUfV sc-bjxVRI bXQAUF dEeLno"><p class="sc-dNdcvo cDXsBO" style="padding-left: 4px;">Discussions</p></div></div></a></div></li><li class="MuiListItem-root MuiListItem-gutters sc-jkvfRO hwBMTA css-22wag7" aria-label="Kaggle Learn List Item"><div class="sc-eXVaYZ idRORJ sc-eUkiUm hwmgS km-listitem--small"><a aria-label="Kaggle Learn" tabindex="0" href="/learn" data-click-log-id="learn" role="link" class="sc-fpikKz brCOKE"><div class="sc-jxYSNo eWhlcc"><div class="sc-zOxLx gBzEKy"><div class="sc-cgHfjM bOWpLD"><span class="google-symbols notranslate MuiIcon-root MuiIcon-fontSizeMedium sc-jytpVa hpjHTZ notranslate sc-jqchuL hfITES css-1jgtvd5" aria-hidden="true" title="Learn" aria-label="Learn">school</span></div></div><div class="sc-kCuUfV sc-bjxVRI bXQAUF dEeLno"><p class="sc-dNdcvo cDXsBO" style="padding-left: 4px;">Learn</p></div></div></a></div></li></ul><ul class="MuiList-root km-list css-1uzmcsd" role="list"><li class="MuiListItem-root MuiListItem-gutters sc-jkvfRO hwBMTA css-22wag7" aria-label="More on Kaggle List Item"><div class="sc-eXVaYZ idRORJ sc-eUkiUm hwmgS km-listitem--small"><a aria-current="false" aria-expanded="false" aria-label="More on Kaggle" tabindex="0" href="#" data-click-log-id="more" role="link" class="sc-fpikKz brCOKE"><div class="sc-jxYSNo eWhlcc"><div class="sc-zOxLx gBzEKy"><div class="sc-cgHfjM bOWpLD"><span class="google-symbols notranslate MuiIcon-root MuiIcon-fontSizeMedium sc-jytpVa hpjHTZ notranslate sc-jqchuL hfITES css-1jgtvd5" aria-hidden="true" title="More" aria-label="More">expand_more</span></div></div><div class="sc-kCuUfV sc-bjxVRI bXQAUF dEeLno"><p class="sc-dNdcvo cDXsBO" style="padding-left: 4px;">More</p></div></div></a></div></li></ul></div></div><div class="sc-eIiBYn kofgbs"><button class="sc-kqRrCr cLcqvw"><div class="sc-ibSYbJ bgwck"><span class="google-symbols notranslate MuiIcon-root MuiIcon-fontSizeMedium sc-jytpVa hpjHTZ notranslate sc-hcHzPY ecHchm css-1jgtvd5" aria-hidden="true" aria-label="Open Active Events dialog">auto_awesome_motion</span></div><p class="sc-dNdcvo sc-hJOQqs cDXsBO iVqIDf">View Active Events</p></button></div></div></nav><nav aria-label="Main menu, search and your account" class="sc-fSwKIM btkNYf"><div class="sc-GjvTv bFEAUD"><div class="sc-ffIBOD dKRkqd"><div class="sc-eNLTQs jQRbPa"><button aria-label="Navigation menu" title="Navigation menu" class="sc-koBvLg bYJwBT google-symbols notranslate">menu</button></div><a href="#site-content" class="sc-JQDoe iXfHEZ">Skip to<br>content</a><div class="sc-jjDSqR kUUyDE"><a href="/" aria-label="Return to Kaggle home page"><img src="/static/images/site-logo.svg" alt="Kaggle" class="sc-iKHArB knPRjS"></a></div></div></div><div class="sc-hndUf jwIkaV"><div class="sc-cbrqwu gdHskY"><div class="sc-iXANDt LHFzk"><div class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root sc-fEETNT dQTfeE css-feqhe6"><div class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedStart css-omz4rr"><span class="google-symbols notranslate MuiIcon-root MuiIcon-fontSizeMedium sc-jytpVa bVaYPe notranslate css-1jgtvd5" aria-hidden="true" style="margin-right: 8px;">search</span><input aria-invalid="false" autocomplete="off" id=":ra:" placeholder="Search" type="text" class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedStart css-r1vfnz" value=""><fieldset aria-hidden="true" class="MuiOutlinedInput-notchedOutline css-igs3ac"><legend class="css-ihdtdm"><span class="notranslate">​</span></legend></fieldset></div></div></div></div><div class="sc-dYsygx mLyrx"><div class="sc-bIxEMU dRfSLF"><div class="sc-eoPBRc haGXzF"><a tabindex="0" class="sc-eknHtZ bwgtIq" href="/account/login?phase=startSignInTab&amp;returnUrl=%2Fcompetitions%2Fdeep-past-initiative-machine-translation%2Foverview" data-discover="true"><button tabindex="-1" role="button" class="sc-pYNGo druOFB"><span class="sc-fVHBlr gHmzEf">Sign In</span></button></a></div><div class="sc-eoPBRc haGXzF"><a tabindex="0" class="sc-eknHtZ bwgtIq" href="/account/login?phase=startRegisterTab&amp;returnUrl=%2Fcompetitions%2Fdeep-past-initiative-machine-translation%2Foverview" data-discover="true"><button tabindex="-1" role="button" class="sc-pYNGo dWiDzy"><span class="sc-fVHBlr gHmzEf">Register</span></button></a></div></div></div></div></nav><div id="site-content" class="sc-gdmatS cQFabk legacy-less-light-theme" role="main"><div class="sc-emMPjM dFQanz"><div class="sc-bRKDuR egfHwv"><div data-nosnippet="true" class="sc-hvigdm fbPeTt">Kaggle uses cookies from Google to deliver and enhance the quality of its services and to analyze traffic.</div><div class="sc-fhHczv dqvoKe"><a href="/cookies" class="sc-dTvVRJ gSHFhQ"><div class="sc-ggWZvA bxFwkO">Learn more</div></a><div class="sc-ggWZvA bxFwkO">OK, Got it.</div></div></div></div><div><div data-testid="competition-detail-render-tid" class="sc-dBKbBc gmEQgy competition"><div class="sc-HABRJ MRQpW"><div height="1px" class="sc-jLuyGO hDWJTP"></div><div class="sc-cRQNIr jfAmzL"><div class="sc-bKAKal ekKsJO"><a href="/organizations/deep-past-initiative" aria-label="Deep Past Initiative's profile" class="sc-lehtBJ CJWUG"><div data-testid="avatar-image" title="Deep Past Initiative" class="sc-bvErBc eRpkug" style="background-image: url(&quot;https://storage.googleapis.com/kaggle-organizations/5215/thumbnail.jpg?t=2025-10-29-16-03-51&quot;);"></div><svg width="32" height="32" viewBox="0 0 32 32"><circle r="15" cx="16" cy="16" fill="none" stroke-width="2" style="stroke: rgb(255, 255, 255);"></circle><circle r="15" cx="16" cy="16" fill="none" stroke-width="2" style="stroke: rgb(32, 33, 36);"></circle></svg></a><span style="flex: 1 1 0%; margin-left: 16px;"><span><span class="sc-eQwNpu hIQOKp">Deep Past Initiative </span></span><span class="sc-eQwNpu hIQOKp"> · Featured Code Competition · <span title="Tue Mar 24 2026 02:59:00 GMT+0300 (GMT+03:00)" aria-label="a month to go">a month to go</span></span></span><div class="sc-bnfIvE dvUMGb"><div><button aria-disabled="false" tabindex="0" role="button" class="sc-pYNGo dWiDzy"><span class="sc-fVHBlr gHmzEf">Join Competition</span></button><div></div></div><span><button aria-label="Competition options menu collapsed" title="Competition Options" class="sc-koBvLg kQNjxk google-symbols notranslate">more_horiz</button></span></div></div><div wrap="hide" class="sc-kXiizz jRpOjQ sc-dEEWCA gPoYlt"><div class="sc-iaNxTy jYlQDC"><h1 class="sc-lgpSej sc-fEaSUP ksHbNq gSOhdD">Deep Past Challenge - Translate Akkadian to English</h1><span class="sc-hwddKA sc-klpEMk gUGhRz fFSAhx" style="margin-bottom: 0px; max-width: unset;"><p class="sc-dNdcvo cDXsBO">Bringing Bronze Age Voices Back to Life – Machine Translation of Old Assyrian Cuneiform</p></span></div><div wrap="hide" class="sc-iOoYQH UIWTd" style="align-self: unset;"><div class="sc-fytLsv kQPVOF"><img src="/competitions/121150/images/header" alt="" class="sc-ctzhCi sc-jvgnhh fEYdlQ lbWesq"></div></div></div></div><div height="1px" class="sc-jLuyGO hDWJTP"></div><div class="sc-howViw mstCo"><div class="sc-cRQNIr jfAmzL"><div class="sc-dgUxlz gLFbPc" style="border-left: 10px solid rgb(255, 255, 255); margin-left: -10px;"><div class="sc-faYJNO bMdkPY"><div class="sc-hufbNW ByEgj"><h2 class="sc-dntSTA sc-ABqPz bNPaHD bVVVKV">Deep Past Challenge - Translate Akkadian to English</h2></div></div><div class="sc-cQRKyo ggfuUF"><div class="MuiTabs-root sc-dDizMC ftYNGb sc-hmJIYN dNAhek css-pc1mzd"><div class="MuiTabs-scrollableX MuiTabs-hideScrollbar css-oqr85h" style="width: 99px; height: 99px; position: absolute; top: -9999px; overflow: scroll;"></div><div class="MuiTabs-scroller MuiTabs-hideScrollbar MuiTabs-scrollableX css-12qnib" style="margin-bottom: 0px;"><div class="MuiTabs-flexContainer css-k008qs" role="tablist"><a class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary Mui-selected sc-gzDksD dWZiMZ css-i5k1e3" tabindex="0" role="tab" aria-selected="true" aria-label="Overview, 1 of 7" href="/competitions/deep-past-initiative-machine-translation/overview" data-discover="true"><span class="sc-hwddKA eMTvcI">Overview</span><span class="MuiTouchRipple-root css-w0pj6f"></span></a><a class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary sc-gzDksD dWZiMZ css-i5k1e3" tabindex="-1" role="tab" aria-selected="false" aria-label="Data, 2 of 7" href="/competitions/deep-past-initiative-machine-translation/data" data-discover="true"><span class="sc-hwddKA gUGhRz">Data</span><span class="MuiTouchRipple-root css-w0pj6f"></span></a><a class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary sc-gzDksD dWZiMZ css-i5k1e3" tabindex="-1" role="tab" aria-selected="false" aria-label="Code, 3 of 7" href="/competitions/deep-past-initiative-machine-translation/code" data-discover="true"><span class="sc-hwddKA gUGhRz">Code</span><span class="MuiTouchRipple-root css-w0pj6f"></span></a><a class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary sc-gzDksD dWZiMZ css-i5k1e3" tabindex="-1" role="tab" aria-selected="false" aria-label="Models, 4 of 7" href="/competitions/deep-past-initiative-machine-translation/models" data-discover="true"><span class="sc-hwddKA gUGhRz">Models</span><span class="MuiTouchRipple-root css-w0pj6f"></span></a><a class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary sc-gzDksD dWZiMZ css-i5k1e3" tabindex="-1" role="tab" aria-selected="false" aria-label="Discussion, 5 of 7" href="/competitions/deep-past-initiative-machine-translation/discussion" data-discover="true"><span class="sc-hwddKA gUGhRz">Discussion</span><span class="MuiTouchRipple-root css-w0pj6f"></span></a><a class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary sc-gzDksD dWZiMZ css-i5k1e3" tabindex="-1" role="tab" aria-selected="false" aria-label="Leaderboard, 6 of 7" href="/competitions/deep-past-initiative-machine-translation/leaderboard" data-discover="true"><span class="sc-hwddKA gUGhRz">Leaderboard</span><span class="MuiTouchRipple-root css-w0pj6f"></span></a><a class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary sc-gzDksD dWZiMZ css-i5k1e3" tabindex="-1" role="tab" aria-selected="false" aria-label="Rules, 7 of 7" href="/competitions/deep-past-initiative-machine-translation/rules" data-discover="true"><span class="sc-hwddKA gUGhRz">Rules</span><span class="MuiTouchRipple-root css-w0pj6f"></span></a></div><span class="MuiTabs-indicator css-zn1p7a" style="left: 0px; width: 71.5156px;"></span></div></div></div></div></div><div role="separator" class="sc-itBLYH opqTs sc-boKDdR gRXFJN sc-efhFTv iHqcbs"></div></div><div style="height: 40px;"></div><div class="sc-dtaUwx WNArR"><div id="abstract" class="sc-fLMXbb vzgYd"><div class="sc-gtGlis cIjmjh"><div class="sc-cWWfbf a-dOFB"><div class="sc-eaGtAs GUHpm"><div class="sc-bgwTQZ iaQTUV"><h2 class="sc-eqYatC sc-cKTanH fQcMPC cyktQc">Overview</h2></div></div></div><div class="sc-jZKtfW cKGhxY"><div class="sc-iRTMaw buAyFc sc-kPyjIR duTLvx"><p>The Deep Past Challenge asks a bold question: Can AI decode 4,000-year-old business records?</p>
+<p>In this competition, you will help decode the everyday business records of ancient Assyrian merchants. Using data from 8,000 cuneiform texts, your goal is to build a translation system for Old Assyrian. Thousands more like them lie unread in museum drawers around the world.</p>
+<p>Your work can help bring their voices back into the story of humanity.</p></div></div></div><div class="sc-ieNBCG jKNSAB"><div class="sc-gQeVgH kDiTEo"><div class="sc-eedIfh ihHOFj sc-kWTCya kaLkjE"><div class="sc-gwPKJL eNfdKk"><div class="sc-iqTXma iDFjYj"><p class="sc-dFVmKS fpqYfg" style="margin-bottom: 4px;">Start</p><span class="sc-ipUnzB gQlect"><span title="Tue Dec 16 2025 22:57:18 GMT+0300 (GMT+03:00)" aria-label="2 months ago">2 months ago</span></span></div><div class="sc-iqTXma iDFjYj" style="text-align: right;"><h6 class="sc-dFVmKS fpqYfg" style="margin-bottom: 4px;">Close</h6><span class="sc-ipUnzB gQlect"><span title="Tue Mar 24 2026 02:59:00 GMT+0300 (GMT+03:00)" aria-label="a month to go">a month to go</span></span></div></div><div class="sc-htKNTW jdQWyw"><div class="sc-jqLVDZ gIIldU"></div><div class="sc-lkQigo bDwKfq"></div><div class="sc-SDHZw hkoKPn"><div class="sc-knVeWd gCcpzO"></div></div><div class="sc-SDHZw jUcLqq"><div class="sc-knVeWd fcvIVt"></div></div><div class="sc-SDHZw kerRKf"><div class="sc-knVeWd jClOGU"></div></div><div class="sc-SDHZw cuArWo"><div class="sc-knVeWd RhgyY"></div><span class="sc-ipUnzB sc-fzGBrH gQlect dXKeSe">Merger &amp; Entry</span></div></div></div></div></div></div><div class="sc-hFRjDq YigNo"><div id="description" class="sc-jCSrnt eYSXAT"><div class="sc-DZJJV hpTdMa sc-fPzfn tImk"><div class="sc-kUouGy ddOypF"><div id="Description" class="sc-dKOxIl kmyCBj"><div class="sc-cWWfbf a-dOFB"><div class="sc-eaGtAs GUHpm"><div class="sc-bgwTQZ iaQTUV"><h3 class="sc-eqYatC sc-fFczXa fQcMPC kNkysA">Description</h3></div></div><button aria-label="Copy link" title="Copy link" class="sc-koBvLg bYJwBT google-symbols notranslate">link</button></div></div><button aria-label="Collapse " title="Collapse " class="sc-koBvLg bYJwBT google-symbols notranslate" aria-expanded="true" style="flex-shrink: 0;">keyboard_arrow_up</button></div><div><div class="sc-Ndwa cEdqBb"><div class="sc-iRTMaw buAyFc"><p>Four thousand years ago, Assyrian merchants left behind one of the world’s richest archives of everyday and commercial life. Tens of thousands of clay tablets record debts settled, caravans dispatched, and discuss day-to-day family matters. Today, half of these tablets remain silent, not because they’re damaged, but because so few people can read the language pressed into their clay. Many have sat untranslated in museum drawers for more than a century.</p>
+<p>The Deep Past Challenge turns this ancient mystery into a modern machine-learning problem by inviting competitors to help unlock the largest untranslated archive of the ancient world. We invite you to build translation models for Old Assyrian cuneiform tablets: Bronze Age texts that have sat unread in museum collections for over a century. Old Assyrian—the dialect used on these tablets—is an early form of Akkadian, the oldest documented Semitic language.</p>
+<p>Nearly twenty-three thousand tablets survive documenting the Old Assyrian trading networks that connected Mesopotamia to Anatolia. Only half have been translated, and less than a dozen scholars in the world are specialized to read the rest.</p>
+<p>These aren’t the polished classics of Greece and Rome, curated and copied by scribes who chose whose voices survived. These are unfiltered, straight from the people who wrote them: letters, invoices and contracts written on clay by ancient merchants and their families. They’re the Instagram stories of the Bronze Age: mundane, immediate, and breathtakingly real. </p>
+<p>Your task is to build neural machine-translation models that convert transliterated Akkadian into English. The challenge: Akkadian is a low-resource, morphologically complex language where a single word can encode what takes multiple words in English. Standard architectures built for modern, data-rich languages fail here.<br>
+Crack this problem and you’ll give voice to 10,000+ untranslated tablets. And you'll do more than revive the past: you'll help pioneer a blueprint for translating the thousands of endangered and overlooked languages—ancient and modern—that the AI age has yet to reach.</p>
+<p>Visit <a href="https://www.deeppast.org" target="_blank" aria-label="this website (opens in a new tab)" rel="noreferrer nofollow">this website</a> to learn more about the organizing team, the Deep Past Initiative, and to find more background materials.</p></div></div></div></div></div><div id="evaluation" class="sc-jCSrnt eYSXAT"><div class="sc-DZJJV hpTdMa sc-fPzfn tImk"><div class="sc-kUouGy ddOypF"><div id="Evaluation" class="sc-dKOxIl kmyCBj"><div class="sc-cWWfbf a-dOFB"><div class="sc-eaGtAs GUHpm"><div class="sc-bgwTQZ iaQTUV"><h3 class="sc-eqYatC sc-fFczXa fQcMPC kNkysA">Evaluation</h3></div></div><button aria-label="Copy link" title="Copy link" class="sc-koBvLg bYJwBT google-symbols notranslate">link</button></div></div><button aria-label="Collapse " title="Collapse " class="sc-koBvLg bYJwBT google-symbols notranslate" aria-expanded="true" style="flex-shrink: 0;">keyboard_arrow_up</button></div><div><div class="sc-Ndwa cEdqBb"><div class="sc-iRTMaw buAyFc"><p>Submissions are evaluated by the <strong>Geometric Mean of the <a href="https://aclanthology.org/P02-1040.pdf" target="_blank" aria-label="BLEU (opens in a new tab)" rel="noreferrer nofollow">BLEU</a> and the <a href="https://statmt.org/wmt17/pdf/WMT70.pdf" target="_blank" aria-label="chrF++ (opens in a new tab)" rel="noreferrer nofollow">chrF++</a> scores</strong>, with each score's sufficient statistics being aggregated across the entire corpus (that is, each score is a <em>micro-average</em>).</p>
+<p>You may refer to the <a href="https://github.com/mjpost/sacrebleu/" target="_blank" aria-label="SacreBLEU (opens in a new tab)" rel="noreferrer nofollow">SacreBLEU</a> library for implementation details. A notebook implementing the metric on Kaggle may be found here: <a href="https://www.kaggle.com/code/metric/dpi-bleu-chrf" target="_blank" aria-label="Geometric Mean of BLEU and chrF++ (opens in a new tab)">Geometric Mean of BLEU and chrF++</a>.</p>
+<h2>Submission File</h2>
+<p>For each <code>id</code> in the test set, you must predict an English translation of the associated Akkadian transliteration. Each translation should comprise a single sentence. The file should contain a header and have the following format:</p>
+<pre class="uc-code-block"><code id="code-block-1770921621232-0" data-processing="yes" data-highlighted="yes" class="hljs language-applescript"><span class="hljs-built_in">id</span>,translation
+<span class="hljs-number">0</span>,Thus Kanesh, <span class="hljs-built_in">say</span> <span class="hljs-keyword">to</span> <span class="hljs-keyword">the</span> -payers, our messenger, <span class="hljs-keyword">every</span> single colony, <span class="hljs-keyword">and</span> <span class="hljs-keyword">the</span>...
+<span class="hljs-number">1</span>,In <span class="hljs-keyword">the</span> letter <span class="hljs-keyword">of</span> <span class="hljs-keyword">the</span> City (<span class="hljs-keyword">it</span> <span class="hljs-keyword">is</span> written): From this <span class="hljs-built_in">day</span> <span class="hljs-keyword">on</span>, whoever buys meteoric...
+<span class="hljs-number">2</span>,As soon <span class="hljs-keyword">as</span> you have heard our letter, who(ever) <span class="hljs-keyword">over</span> there has either sold <span class="hljs-keyword">it</span> <span class="hljs-keyword">to</span>...
+<span class="hljs-number">3</span>,Send a <span class="hljs-keyword">copy</span> <span class="hljs-keyword">of</span> (this) letter <span class="hljs-keyword">of</span> ours <span class="hljs-keyword">to</span> <span class="hljs-keyword">every</span> single colony <span class="hljs-keyword">and</span> <span class="hljs-keyword">to</span> all <span class="hljs-keyword">the</span> trading...
+...
+</code><div class="uc-code-block-copy-button-wrapper"><button aria-label="Copy code" class="uc-code-block-copy-button google-symbols">content_copy</button></div></pre></div></div></div></div></div><div id="timeline" class="sc-jCSrnt eYSXAT"><div class="sc-DZJJV hpTdMa sc-fPzfn tImk"><div class="sc-kUouGy ddOypF"><div id="Timeline" class="sc-dKOxIl kmyCBj"><div class="sc-cWWfbf a-dOFB"><div class="sc-eaGtAs GUHpm"><div class="sc-bgwTQZ iaQTUV"><h3 class="sc-eqYatC sc-fFczXa fQcMPC kNkysA">Timeline</h3></div></div><button aria-label="Copy link" title="Copy link" class="sc-koBvLg bYJwBT google-symbols notranslate">link</button></div></div><button aria-label="Collapse " title="Collapse " class="sc-koBvLg bYJwBT google-symbols notranslate" aria-expanded="true" style="flex-shrink: 0;">keyboard_arrow_up</button></div><div><div class="sc-Ndwa cEdqBb"><div class="sc-iRTMaw buAyFc"><ul>
+<li><strong>December 16, 2025</strong> - Start Date. </li>
+<li><strong>March 16, 2026</strong> - Entry Deadline. You must accept the competition rules before this date in order to compete. </li>
+<li><strong>March 16, 2026</strong> - Team Merger Deadline. This is the last day participants may join or merge teams. </li>
+<li><strong>March 23, 2026</strong> - Final Submission Deadline. </li>
+</ul>
+<p>All deadlines are at 11:59 PM UTC on the corresponding day unless otherwise noted. The competition organizers reserve the right to update the contest timeline if they deem it necessary.</p></div></div></div></div></div><div id="prizes" class="sc-jCSrnt eYSXAT"><div class="sc-DZJJV hpTdMa sc-fPzfn tImk"><div class="sc-kUouGy ddOypF"><div id="Prizes" class="sc-dKOxIl kmyCBj"><div class="sc-cWWfbf a-dOFB"><div class="sc-eaGtAs GUHpm"><div class="sc-bgwTQZ iaQTUV"><h3 class="sc-eqYatC sc-fFczXa fQcMPC kNkysA">Prizes</h3></div></div><button aria-label="Copy link" title="Copy link" class="sc-koBvLg bYJwBT google-symbols notranslate">link</button></div></div><button aria-label="Collapse " title="Collapse " class="sc-koBvLg bYJwBT google-symbols notranslate" aria-expanded="true" style="flex-shrink: 0;">keyboard_arrow_up</button></div><div><div class="sc-Ndwa cEdqBb"><div class="sc-iRTMaw buAyFc"><ul>
+<li>1st Place - $ 15,000</li>
+<li>2nd Place - $ 10,000</li>
+<li>3rd Place - $ 8,000</li>
+<li>4th Place - $ 7,000</li>
+<li>5th Place - $ 5,000</li>
+<li>6th Place - $ 5,000</li>
+</ul></div></div></div></div></div><div id="code-requirements" class="sc-jCSrnt eYSXAT"><div class="sc-DZJJV hpTdMa sc-fPzfn tImk"><div class="sc-kUouGy ddOypF"><div id="Code Requirements" class="sc-dKOxIl kmyCBj"><div class="sc-cWWfbf a-dOFB"><div class="sc-eaGtAs GUHpm"><div class="sc-bgwTQZ iaQTUV"><h3 class="sc-eqYatC sc-fFczXa fQcMPC kNkysA">Code Requirements</h3></div></div><button aria-label="Copy link" title="Copy link" class="sc-koBvLg bYJwBT google-symbols notranslate">link</button></div></div><button aria-label="Collapse " title="Collapse " class="sc-koBvLg bYJwBT google-symbols notranslate" aria-expanded="true" style="flex-shrink: 0;">keyboard_arrow_up</button></div><div><div class="sc-Ndwa cEdqBb"><div class="sc-iRTMaw buAyFc"><p><img src="https://storage.googleapis.com/kaggle-media/competitions/general/Kerneler-white-desc2_transparent.png" style="float:right;width:70px;padding:10px" alt=""></p>
+<p>Submissions to this competition must be made through Notebooks. In order for the "Submit" button to be active after a commit, the following conditions must be met: </p>
+<ul>
+<li>CPU Notebook &lt;= 9 hours run-time </li>
+<li>GPU Notebook &lt;= 9 hours run-time </li>
+<li>Internet access disabled </li>
+<li>Freely &amp; publicly available external data is allowed, including pre-trained models </li>
+<li>Submission file must be named <code>submission.csv</code> </li>
+</ul>
+<p>Please see the <a href="https://www.kaggle.com/docs/competitions#notebooks-only-FAQ" target="_blank" aria-label="Code Competition FAQ (opens in a new tab)">Code Competition FAQ</a> for more information on how to submit. And review the <a href="https://www.kaggle.com/code-competition-debugging" target="_blank" aria-label="code debugging doc (opens in a new tab)">code debugging doc</a> if you are encountering submission errors.</p></div></div></div></div></div><div id="dataset-instructions" class="sc-jCSrnt eYSXAT"><div class="sc-DZJJV hpTdMa sc-fPzfn tImk"><div class="sc-kUouGy ddOypF"><div id="Dataset Instructions" class="sc-dKOxIl kmyCBj"><div class="sc-cWWfbf a-dOFB"><div class="sc-eaGtAs GUHpm"><div class="sc-bgwTQZ iaQTUV"><h3 class="sc-eqYatC sc-fFczXa fQcMPC kNkysA">Dataset Instructions</h3></div></div><button aria-label="Copy link" title="Copy link" class="sc-koBvLg bYJwBT google-symbols notranslate">link</button></div></div><button aria-label="Collapse " title="Collapse " class="sc-koBvLg bYJwBT google-symbols notranslate" aria-expanded="true" style="flex-shrink: 0;">keyboard_arrow_up</button></div><div><div class="sc-Ndwa cEdqBb"><div class="sc-iRTMaw buAyFc"><p>By far the biggest challenge in working with Akkadian / Old Assyrian texts is dealing with the formatting issues. As they say, “garbage in, garbage out” and unfortunately, the format of text in transliteration poses challenges at each step of the ML workflow, from tokenization to the transformation and embedding process.</p>
+<p>To mitigate these issues, we provide the following information and suggestions in handling the different formatting challenges in both the transliterated and translated texts.</p>
+<h2>Texts in Transliteration</h2>
+<ul>
+<li><strong>Main formatting challenges</strong>: in addition to the standard transliteration format, with hyphenated syllables, additional scribal additions have encumbered the text with superscripts, subscripts, and punctuations only meaningful to specialists in Assyriology (<a href="http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html#Compound" target="_blank" aria-label="Complete Transliteration Conversion Guide (opens in a new tab)" rel="noreferrer nofollow">Complete Transliteration Conversion Guide</a>).</li>
+<li><strong>Capitalization</strong> is also a challenge, as it encodes meaning in two different ways. When the first letter of a word is capitalized it implies the word is a personal name or a place name (i.e. proper noun). When the word is in ALL CAPS, that implies it is a Sumerian logogram and was written in place of the Akkadian syllabic spelling for scribal simplicity.</li>
+<li><strong>Determinatives</strong> are used in Akkadian as a type of classifier for nouns and proper nouns. These signs are usually printed in superscript format adjacent to the nouns they classify. To avoid the potential confusion of reading a determinative sign as part of a work, we have followed the standard transliteration guide and retained curly brackets around these. While this may pose challenges in ML, we note that this is the only use of curly brackets in the transliteration (e.g. a-lim{ki}, A-mur-{d}UTU).</li>
+<li><strong>Broken text on the tablet</strong>: as these are ancient texts, they include a number of breaks and lacunae. In order to standardize these breaks, we suggest using only two markers, one for a small break of a single sign &lt;gap&gt; and the other for more than one sign up to large breaks &lt;big_gap&gt;.</li>
+<li>For the purpose of this challenge, we include suggestions of how best to handle these formatting issues below.</li>
+</ul>
+<h2>Texts in Translation</h2>
+<p>There is currently no complete or extensive database for translations of ancient cuneiform documents, and this is especially true for the Old Assyrian texts. For this reason, we gathered together the books and articles with the translations and commentaries of the Old Assyrian texts and we digitized them with an OCR and LLM for corrections. Even after all that work, there are still a number of formatting issues with these translations, which makes this a central component of the challenge for successful machine translation development.</p>
+<p>Translations usually retain the same proper noun capitalization, and these proper nouns in general are where most ML tasks underperform. To account for these issues, we have included a lexicon in the dataset which includes all the proper nouns as specialists have normalized them for print publications.</p>
+<h3>Modern Scribal Notations</h3>
+<p>Lastly, it is important to note that there are modern scribal notations that accompany the text in transliteration and translation. The first of these include line numbers. These are typically numbered 1, 5, 10, 15, etc. However, if there are any broken lines, the line numbers will have an apostrophe immediately following (‘), and if there is a second set of broken lines, the line numbers will have two trailing apostrophes (‘’). These are not quotation marks, but a scribal convention editors sometimes use in publication.</p>
+<p>Additional scribal notations include:</p>
+<ul>
+<li>Exclamation marks when a scholar is certain about a difficult reading of a sign !</li>
+<li>Question mark when a scholar is uncertain about a difficult reading of a sign ?</li>
+<li>Forward slash for when the signs belonging to a line are found below the line /</li>
+<li>Colon for the Old Assyrian word divider sign :</li>
+<li>Comments for breaks and erasures in parentheses ( )</li>
+<li>Scribal insertions when a correction is made in pointy brackets &lt; &gt;</li>
+<li>The demarcation of errant or erroneous signs in double pointy brackets &lt;&lt; &gt;&gt;</li>
+<li>Half brackets for partially broken signs ˹ ˺</li>
+<li>Square brackets for clearly broken signs and lines [ ]</li>
+<li>Curly brackets for determinatives (see below) { }</li>
+</ul>
+<h1>Formatting Suggestions for Transliterations and Translations:</h1>
+<h3>Remove (modern scribal notations):</h3>
+<ul>
+<li>!    (certain reading)</li>
+<li>?    (questionable reading)</li>
+<li>/   (line divider)</li>
+<li>: OR .    (word divider)</li>
+<li>&lt; &gt;    (scribal insertions, but keep the text in translit / translations)</li>
+<li>˹ ˺    (partially broken signs, to be removed from transliteration)</li>
+<li>[ ]    (remove from document level transliteration. e.g. [KÙ.BABBAR] → KÙ.BABBAR)</li>
+</ul>
+<h3>Replace (breaks, gaps, superscripts, subscripts):</h3>
+<ul>
+<li>[x]   &lt;gap&gt;</li>
+<li>…   &lt;big_gap&gt;</li>
+<li>[… …]    &lt;big_gap&gt;</li>
+<li><sup>ki</sup>  {ki} (see full list below)</li>
+<li>il<sub>5</sub>     il5 (same for any subscripted number)</li>
+</ul>
+<h3>Additional Characters &amp; Formats (you may encounter):</h3>
+<table>
+<thead>
+<tr>
+<th>Character</th>
+<th>CDLI</th>
+<th>ORACC</th>
+<th>Unicode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>á</td>
+<td>a2</td>
+<td>a₂</td>
+<td></td>
+</tr>
+<tr>
+<td>à</td>
+<td>a3</td>
+<td>a₃</td>
+<td></td>
+</tr>
+<tr>
+<td>é</td>
+<td>e2</td>
+<td>e₂</td>
+<td></td>
+</tr>
+<tr>
+<td>è</td>
+<td>e3</td>
+<td>e₃</td>
+<td></td>
+</tr>
+<tr>
+<td>í</td>
+<td>i2</td>
+<td>i₂</td>
+<td></td>
+</tr>
+<tr>
+<td>ì</td>
+<td>i3</td>
+<td>i₃</td>
+<td></td>
+</tr>
+<tr>
+<td>ú</td>
+<td>u2</td>
+<td>u₂</td>
+<td></td>
+</tr>
+<tr>
+<td>ù</td>
+<td>u3</td>
+<td>u₃</td>
+<td></td>
+</tr>
+<tr>
+<td>š</td>
+<td>sz</td>
+<td>š</td>
+<td>U+161</td>
+</tr>
+<tr>
+<td>Š</td>
+<td>SZ</td>
+<td>Š</td>
+<td>U+160</td>
+</tr>
+<tr>
+<td>Ṣ</td>
+<td>s,</td>
+<td>ṣ</td>
+<td>U+1E63</td>
+</tr>
+<tr>
+<td>ṣ</td>
+<td>S,</td>
+<td>Ṣ</td>
+<td>U+1E62</td>
+</tr>
+<tr>
+<td>ṭ</td>
+<td>t,</td>
+<td>ṭ</td>
+<td>U+1E6D</td>
+</tr>
+<tr>
+<td>Ṭ</td>
+<td>T,</td>
+<td>Ṭ</td>
+<td>U+1E6C</td>
+</tr>
+<tr>
+<td>‘</td>
+<td>‘</td>
+<td>ʾ</td>
+<td>U+02BE</td>
+</tr>
+<tr>
+<td>0-9</td>
+<td>0-9</td>
+<td>subscript ₀-₉</td>
+<td>U+2080-U+2089</td>
+</tr>
+<tr>
+<td>xₓ</td>
+<td>Xx</td>
+<td>subscript ₓ</td>
+<td>U+208A</td>
+</tr>
+<tr>
+<td>ḫ</td>
+<td>h</td>
+<td>h</td>
+<td>U+1E2B</td>
+</tr>
+<tr>
+<td>Ḫ</td>
+<td>H</td>
+<td>H</td>
+<td>U+1E2A</td>
+</tr>
+</tbody>
+</table>
+<p>These rows of Ḫ ḫ are here to indicate that training data (and publication data) has Ḫ ḫ but the test data has only H h.</p>
+<p>There is only one type of H in Akkadian, so this can be a simple substitution for transliteration text Ḫ ḫ --&gt; H h</p>
+<h3>Akkadian determinatives in curly brackets:</h3>
+<ol>
+<li>{d} = dingir ‘god, deity’ — <sup>d</sup> preceding non-human divine actors  </li>
+<li>{mul} = ‘stars’ — <sup>MUL</sup> preceding astronomical bodies and constellations  </li>
+<li>{ki} = ‘earth’ — <sup>KI</sup> following a geographical place name or location  </li>
+<li>{lu₂} = <sup>LÚ</sup> preceding people and professions  </li>
+<li>{e₂} = {<sup>É</sup>} preceding buildings and institutions, such as temples and palaces  </li>
+<li>{uru} = (<sup>URU</sup>) preceding names of settlements, such as villages, towns and cities  </li>
+<li>{kur} = (<sup>KUR</sup>) preceding lands and territories as well as mountains  </li>
+<li>{mi} = munus (<sup>f</sup>) preceding feminine personal names  </li>
+<li>{m} = (<sup>1</sup> or <sup>m</sup>) preceding masculine personal names  </li>
+<li>{geš} / {ĝeš) = (<sup>GIŠ</sup>) preceding trees and things made of wood  </li>
+<li>{tug₂} = (<sup>TÚG</sup>) preceding textiles and other woven objects  </li>
+<li>{dub} = (<sup>DUB</sup>) preceding clay tablets, and by extension, documents and legal records  </li>
+<li>{id₂} = (<sup>ÍD</sup>) (a ligature of A and ENGUR, transliterated: A.ENGUR) preceding names of canals or rivers or when written on its own referring to the divine river  </li>
+<li>{mušen} = (<sup>MUŠEN</sup>) preceding birds  </li>
+<li>{na₄} = (<sup>na4</sup>) preceding stone  </li>
+<li>{kuš} = (<sup>kuš</sup>) preceding (animal) skin, fleece, hides  </li>
+<li>{u₂} = (<sup>Ú</sup>) preceding plants</li>
+</ol></div></div></div></div></div><div id="citation" class="sc-hAUqM kaEKKN"><div class="sc-DZJJV hpTdMa" style="border-top: 0px; border-bottom: 0px;"><div class="sc-kUouGy ddOypF"><div id="citation" class="sc-dKOxIl kmyCBj"><div class="sc-cWWfbf a-dOFB"><div class="sc-eaGtAs GUHpm"><div class="sc-bgwTQZ iaQTUV"><h3 class="sc-eqYatC sc-fFczXa fQcMPC kNkysA">Citation</h3></div></div><button aria-label="Copy link" title="Copy link" class="sc-koBvLg bYJwBT google-symbols notranslate">link</button></div></div><button aria-label="Collapse Citation" title="Collapse Citation" class="sc-koBvLg bYJwBT google-symbols notranslate" aria-expanded="true" style="flex-shrink: 0;">keyboard_arrow_up</button></div><div><div class="sc-cNFoqh bFafpF"><p class="sc-fbQrwq sc-kXHtdE jNNCAu dPDmXf">Abdulla, F., Agarwal, R., Anderson, A., Barjamovic, G., Lassen, A., Ryan Holbrook, and María Cruz. Deep Past Challenge - Translate Akkadian to English. https://kaggle.com/competitions/deep-past-initiative-machine-translation, 2025. Kaggle.</p><button tabindex="0" role="button" class="sc-pYNGo cfktCu"><span class="sc-fVHBlr gHmzEf">Cite</span></button><div></div></div></div></div></div></div><div></div><div class="sc-gkJpar bnjJQ"><div><div class="sc-kslMXo gFSLNm"><div class="sc-dyIbYR fBsvmK"><h2 class="sc-dFVmKS fpqYfg" style="margin-bottom: 4px;">Competition Host</h2><p class="sc-fbQrwq kHxwkV">Deep Past Initiative</p></div><div class="sc-gNmOuq wkdPu"><a href="/organizations/deep-past-initiative" aria-label="Deep Past Initiative's profile" class="sc-lehtBJ CJWUG"><div data-testid="avatar-image" title="Deep Past Initiative" class="sc-bvErBc dpjTqg" style="background-image: url(&quot;https://storage.googleapis.com/kaggle-organizations/5215/thumbnail.jpg?t=2025-10-29-16-03-51&quot;);"></div><svg width="48" height="48" viewBox="0 0 48 48"><circle r="22.5" cx="24" cy="24" fill="none" stroke-width="3" style="stroke: rgb(255, 255, 255);"></circle><circle r="22.5" cx="24" cy="24" fill="none" stroke-width="3" style="stroke: rgb(32, 33, 36);"></circle></svg></a></div></div><div class="sc-kslMXo gFSLNm"><div class="sc-dyIbYR fBsvmK"><h2 class="sc-dFVmKS fpqYfg" style="margin-bottom: 4px;">Prizes &amp; Awards</h2><div style="display: flex; flex-direction: column;"><div style="display: flex; flex-direction: row;"><p class="sc-fbQrwq kHxwkV" style="padding-right: 4px;">$50,000</p></div><p class="sc-fbQrwq kHxwkV">Awards Points &amp; Medals</p></div></div></div><div class="sc-kslMXo gFSLNm"><div class="sc-dyIbYR fBsvmK"><h2 class="sc-dFVmKS fpqYfg" style="margin-bottom: 4px;">Participation</h2><p class="sc-fbQrwq kHxwkV">8,673 Entrants</p><p class="sc-fbQrwq kHxwkV">2,132 Participants</p><p class="sc-fbQrwq kHxwkV">1,895 Teams</p><p class="sc-fbQrwq kHxwkV">24,378 Submissions</p></div></div><div class="sc-kslMXo gFSLNm"><div class="sc-dyIbYR fBsvmK"><h2 class="sc-dFVmKS fpqYfg" style="margin-bottom: 4px;">Tags</h2><div style="margin-top: 12px;"><div class="sc-kbFRbL kmkSvj sc-dekbKM fBMeEb" id="combo-tags-menu-chipset" role="group" aria-label="Tags"><a href="/competitions?tagIds=16726-Translation" target="_blank" role="link" aria-label="Translation opens in new window" class="sc-jCJzcv bkWqRJ" style="cursor: pointer; margin-right: 0px;"><span class="sc-jaXbil sc-buIUqS gVjMof kctwlc">Translation</span></a><a href="/competitions?tagIds=9109-History" target="_blank" role="link" aria-label="History opens in new window" class="sc-jCJzcv bkWqRJ" style="cursor: pointer; margin-right: 0px;"><span class="sc-jaXbil sc-buIUqS gVjMof kctwlc">History</span></a><a href="/competitions?tagIds=14104-Text" target="_blank" role="link" aria-label="Text opens in new window" class="sc-jCJzcv bkWqRJ" style="cursor: pointer; margin-right: 0px;"><span class="sc-jaXbil sc-buIUqS gVjMof kctwlc">Text</span></a><div role="presentation" aria-label="Custom Metric opens in new window" class="sc-jCJzcv bkWqRJ" style="cursor: pointer; margin-right: 0px;"><span class="sc-jaXbil sc-buIUqS gVjMof kctwlc">Custom Metric</span></div></div></div></div></div></div><aside class="sc-kmEFuU lcgldV"><div class="sc-ljeMUP dgqLcs"><div font-weight="bold" class="sc-kCuUfV bXQAUE">Table of Contents</div><button aria-label="Collapse all sections" title="Collapse all sections" class="sc-koBvLg kQNjxk google-symbols notranslate">collapse_all</button></div><div class="MuiTabs-root MuiTabs-vertical sc-dDizMC hotuJC css-6hrzpk"><div class="MuiTabs-hideScrollbar css-oqr85h" style="width: 99px; height: 99px; position: absolute; top: -9999px; overflow: scroll;"></div><div class="MuiTabs-scroller MuiTabs-hideScrollbar MuiTabs-scrollableY css-ccrt04" style="margin-right: 0px;"><div aria-orientation="vertical" class="MuiTabs-flexContainer MuiTabs-flexContainerVertical css-j7qwjs" role="tablist"><a class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary sc-gzDksD eYSpAt css-i5k1e3" tabindex="0" role="tab" aria-selected="false" id="578620" aria-label="Overview, 1 of 8" href="/competitions/deep-past-initiative-machine-translation/overview/abstract" data-discover="true"><span class="sc-hwddKA gUGhRz">Overview</span><span class="MuiTouchRipple-root css-w0pj6f"></span></a><a class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary sc-gzDksD eYSpAt css-i5k1e3" tabindex="-1" role="tab" aria-selected="false" id="578614" aria-label="Description, 2 of 8" href="/competitions/deep-past-initiative-machine-translation/overview/description" data-discover="true"><span class="sc-hwddKA gUGhRz">Description</span><span class="MuiTouchRipple-root css-w0pj6f"></span></a><a class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary sc-gzDksD eYSpAt css-i5k1e3" tabindex="-1" role="tab" aria-selected="false" id="578615" aria-label="Evaluation, 3 of 8" href="/competitions/deep-past-initiative-machine-translation/overview/evaluation" data-discover="true"><span class="sc-hwddKA gUGhRz">Evaluation</span><span class="MuiTouchRipple-root css-w0pj6f"></span></a><a class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary sc-gzDksD eYSpAt css-i5k1e3" tabindex="-1" role="tab" aria-selected="false" id="578616" aria-label="Timeline, 4 of 8" href="/competitions/deep-past-initiative-machine-translation/overview/timeline" data-discover="true"><span class="sc-hwddKA gUGhRz">Timeline</span><span class="MuiTouchRipple-root css-w0pj6f"></span></a><a class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary sc-gzDksD eYSpAt css-i5k1e3" tabindex="-1" role="tab" aria-selected="false" id="578618" aria-label="Prizes, 5 of 8" href="/competitions/deep-past-initiative-machine-translation/overview/prizes" data-discover="true"><span class="sc-hwddKA gUGhRz">Prizes</span><span class="MuiTouchRipple-root css-w0pj6f"></span></a><a class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary sc-gzDksD eYSpAt css-i5k1e3" tabindex="-1" role="tab" aria-selected="false" id="578619" aria-label="Code Requirements, 6 of 8" href="/competitions/deep-past-initiative-machine-translation/overview/code-requirements" data-discover="true"><span class="sc-hwddKA gUGhRz">Code Requirements</span><span class="MuiTouchRipple-root css-w0pj6f"></span></a><a class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary sc-gzDksD eYSpAt css-i5k1e3" tabindex="-1" role="tab" aria-selected="false" id="597956" aria-label="Dataset Instructions, 7 of 8" href="/competitions/deep-past-initiative-machine-translation/overview/dataset-instructions" data-discover="true"><span class="sc-hwddKA gUGhRz">Dataset Instructions</span><span class="MuiTouchRipple-root css-w0pj6f"></span></a><a class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary sc-gzDksD eYSpAt css-i5k1e3" tabindex="-1" role="tab" aria-selected="false" id="99999" aria-label="Citation, 8 of 8" href="/competitions/deep-past-initiative-machine-translation/overview/citation" data-discover="true"><span class="sc-hwddKA gUGhRz">Citation</span><span class="MuiTouchRipple-root css-w0pj6f"></span></a></div><span class="MuiTabs-indicator css-1phc0gu" style="top: 0px; height: 0px;"></span></div></div></aside></div></div></div></div></div><div id="nav-footer" class="sc-bsDpAt cbKRDS"></div></div><div aria-live="polite" aria-atomic="true" role="alert" class="sc-jTXfsZ DtMhK"></div></div>
+
+
+</body></html>

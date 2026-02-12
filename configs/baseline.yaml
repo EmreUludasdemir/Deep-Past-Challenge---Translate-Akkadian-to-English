@@ -1,0 +1,77 @@
+global:
+  seed: 42
+  data_dir: /kaggle/input/deep-past-initiative-machine-translation
+  output_dir: /kaggle/working/outputs/baseline
+  source_column: transliteration
+  target_column: translation
+  id_column: id
+
+data:
+  use_weak_data: false
+  weak_max_pairs: 0
+  min_src_tokens: 2
+  max_src_tokens: 256
+  min_tgt_tokens: 2
+  max_tgt_tokens: 200
+  ratio_low: 0.12
+  ratio_high: 6.0
+
+cv:
+  n_splits: 5
+  val_fold: 0
+
+training:
+  per_device_train_batch_size: 8
+  gradient_accumulation_steps: 8
+  per_device_eval_batch_size: 16
+  max_source_length: 256
+  max_target_length: 160
+  generation_max_length: 160
+  generation_num_beams: 4
+  evaluation_strategy: epoch
+  save_strategy: epoch
+  save_total_limit: 3
+  fp16: true
+  logging_steps: 50
+  early_stopping_patience: 2
+
+models:
+  - name: byt5_small_baseline
+    pretrained_model_name: google/byt5-small
+    optimizer: adafactor
+    label_smoothing: 0.05
+    stages:
+      - name: clean
+        learning_rate: 2.0e-4
+        warmup_ratio: 0.05
+        epochs: 10
+        include_weak_data: false
+        weak_sample_ratio: 0.0
+        hard_replay: false
+
+inference:
+  batch_size: 16
+  max_source_length: 256
+  max_target_length: 160
+  num_beams: 4
+  n_best: 1
+  enable_entity_repair: true
+  ensemble:
+    method: weighted_vote
+    rerank_weights:
+      bleu: 0.45
+      chrf: 0.45
+      length: 0.10
+
+hpo:
+  phase1_grid:
+    learning_rate: [1.0e-4, 2.0e-4, 3.0e-4]
+    warmup_ratio: [0.03, 0.05, 0.08]
+    beam_size: [3, 4, 5]
+    max_target_length: [96, 128, 160]
+    label_smoothing: [0.0, 0.05, 0.1]
+  phase2_bayesian:
+    enabled: true
+    n_trials: 30
+    objective: maximize_validation_geometric_mean
+    seed: 42

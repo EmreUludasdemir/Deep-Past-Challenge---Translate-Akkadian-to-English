@@ -346,6 +346,7 @@ def mine_weak_parallel_data(
     max_pairs: int = 2500,
     low_ratio: float = 0.12,
     high_ratio: float = 6.0,
+    ne_lexicon: Optional[set] = None,
 ) -> pd.DataFrame:
     if published_df is None or publications_df is None:
         return pd.DataFrame(columns=["source", "target", "group_id", "origin"])
@@ -385,17 +386,23 @@ def mine_weak_parallel_data(
             continue
         for group_id in blob_key_hits[:3]:
             src = doc_to_src[group_id]
+            src_entities = extract_source_named_entities(src, lexicon=ne_lexicon) if ne_lexicon else []
             for sent in candidates[:4]:
                 tgt = canonicalize_text(sent, is_translation=True)
-                if length_ratio_ok(src, tgt, low=low_ratio, high=high_ratio):
-                    rows.append(
-                        {
-                            "source": src,
-                            "target": tgt,
-                            "group_id": group_id,
-                            "origin": "weak_publications",
-                        }
-                    )
+                if not length_ratio_ok(src, tgt, low=low_ratio, high=high_ratio):
+                    continue
+                if src_entities:
+                    tgt_lower = tgt.lower()
+                    if not any(e.lower() in tgt_lower for e in src_entities):
+                        continue
+                rows.append(
+                    {
+                        "source": src,
+                        "target": tgt,
+                        "group_id": group_id,
+                        "origin": "weak_publications",
+                    }
+                )
                 if len(rows) >= max_pairs:
                     break
             if len(rows) >= max_pairs:
@@ -410,6 +417,48 @@ def mine_weak_parallel_data(
         drop=True
     )
     return out
+
+
+def mine_dictionary_pairs(
+    ebl_dict_df: Optional[pd.DataFrame],
+    max_pairs: int = 3000,
+) -> pd.DataFrame:
+    """Extract word/phrase-level parallel pairs from eBL Dictionary."""
+    empty = pd.DataFrame(columns=["source", "target", "group_id", "origin"])
+    if ebl_dict_df is None or ebl_dict_df.empty:
+        return empty
+
+    src_col = next(
+        (c for c in ebl_dict_df.columns if c.lower() in
+         ("form", "word", "transliteration", "lemma", "cf")),
+        None,
+    )
+    tgt_col = next(
+        (c for c in ebl_dict_df.columns if c.lower() in
+         ("meaning", "translation", "definition", "english", "gw", "guide_word")),
+        None,
+    )
+    if not src_col or not tgt_col:
+        return empty
+
+    rows: List[Dict[str, Any]] = []
+    for _, row in ebl_dict_df.iterrows():
+        src = canonicalize_text(str(row.get(src_col, "") or ""), is_translation=False)
+        tgt = canonicalize_text(str(row.get(tgt_col, "") or ""), is_translation=True)
+        if not src or not tgt or len(src) < 2 or len(tgt) < 2:
+            continue
+        rows.append({
+            "source": src,
+            "target": tgt,
+            "group_id": f"dict_{len(rows)}",
+            "origin": "dictionary",
+        })
+        if len(rows) >= max_pairs:
+            break
+
+    if not rows:
+        return empty
+    return pd.DataFrame(rows).drop_duplicates(subset=["source", "target"]).reset_index(drop=True)
 
 
 def build_named_entity_lexicon(oa_lexicon_df: Optional[pd.DataFrame]) -> set:
@@ -451,16 +500,34 @@ def extract_source_named_entities(source: str, lexicon: Optional[set] = None) ->
     return list(dict.fromkeys(entities))
 
 
-def repair_named_entities(prediction: str, source: str, lexicon: Optional[set] = None) -> str:
+def repair_named_entities(
+    prediction: str,
+    source: str,
+    lexicon: Optional[set] = None,
+    max_append: int = 2,
+) -> str:
     prediction = normalize_unicode(prediction)
     entities = extract_source_named_entities(source, lexicon=lexicon)
     if not entities:
         return prediction
     repaired = prediction
     lower_pred = f" {repaired.lower()} "
-    missing = [ent for ent in entities if f" {ent.lower()} " not in lower_pred]
-    if missing and len(repaired.split()) > 2:
-        repaired = repaired + " " + " ".join(missing[:1])
+
+    missing = []
+    for ent in entities:
+        ent_lower = ent.lower()
+        if f" {ent_lower} " in lower_pred:
+            continue
+        if ent_lower in repaired.lower():
+            continue
+        missing.append(ent)
+
+    if not missing or len(repaired.split()) <= 2:
+        return repaired
+
+    to_add = missing[:max_append]
+    stripped = repaired.rstrip(".,:;!? ")
+    repaired = stripped + ", " + ", ".join(to_add) + "."
     return re.sub(r"\s+", " ", repaired).strip()
 
 
@@ -548,9 +615,11 @@ def sentence_chrf_proxy(candidate: str, references: Sequence[str]) -> float:
 def consensus_rerank(
     candidates: Sequence[str],
     model_weights: Optional[Sequence[float]] = None,
+    beam_scores: Optional[Sequence[float]] = None,
     bleu_weight: float = 0.45,
     chrf_weight: float = 0.45,
     length_weight: float = 0.10,
+    beam_score_weight: float = 0.15,
 ) -> str:
     if not candidates:
         return ""
@@ -560,6 +629,19 @@ def consensus_rerank(
 
     if model_weights is None:
         model_weights = [1.0] * len(candidates)
+    if beam_scores is None:
+        beam_scores = [0.0] * len(candidates)
+
+    cand_beam: Dict[str, float] = {}
+    for text, bs in zip(candidates, beam_scores):
+        key = text.strip()
+        if key and (key not in cand_beam or bs > cand_beam[key]):
+            cand_beam[key] = bs
+
+    bs_values = list(cand_beam.values())
+    bs_min = min(bs_values) if bs_values else 0.0
+    bs_max = max(bs_values) if bs_values else 0.0
+    bs_range = bs_max - bs_min if bs_max > bs_min else 1.0
 
     avg_len = np.mean([len(c.split()) for c in unique])
     best_score = -1e18
@@ -577,10 +659,13 @@ def consensus_rerank(
             if pred.strip() == cand:
                 vote_score += float(w)
 
+        norm_beam = (cand_beam.get(cand, bs_min) - bs_min) / bs_range * 100.0
+
         final = (
             bleu_weight * bleu_proxy
             + chrf_weight * chrf_proxy
             + length_weight * len_score
+            + beam_score_weight * norm_beam
             + 5.0 * vote_score
         )
         if final > best_score:

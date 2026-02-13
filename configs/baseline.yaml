@@ -28,6 +28,7 @@ training:
   max_target_length: 160
   generation_max_length: 160
   generation_num_beams: 4
+  eval_generation_num_beams: 1
   evaluation_strategy: epoch
   save_strategy: epoch
   save_total_limit: 3
@@ -38,6 +39,7 @@ training:
 models:
   - name: byt5_small_baseline
     pretrained_model_name: google/byt5-small
+    task_prefix: "translate Akkadian to English: "
     optimizer: adafactor
     label_smoothing: 0.05
     stages:
@@ -55,6 +57,9 @@ inference:
   max_target_length: 160
   num_beams: 4
   n_best: 1
+  length_penalty: 1.2
+  repetition_penalty: 1.2
+  no_repeat_ngram_size: 0
   enable_entity_repair: true
   ensemble:
     method: weighted_vote

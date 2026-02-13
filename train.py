@@ -1,6 +1,6 @@
 import argparse
 import os
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -25,6 +25,7 @@ from utils import (
     filter_parallel_pairs,
     load_competition_data,
     load_yaml,
+    mine_dictionary_pairs,
     mine_weak_parallel_data,
     save_json,
     set_seed,
@@ -32,7 +33,8 @@ from utils import (
 
 
 def _prepare_master_training_frame(
-    data_frames: Dict[str, pd.DataFrame], config: Dict[str, Any]
+    data_frames: Dict[str, pd.DataFrame], config: Dict[str, Any],
+    ne_lexicon: Optional[set] = None,
 ) -> pd.DataFrame:
     sentence_df = build_sentence_level_train(
         train_df=data_frames["train"],
@@ -47,9 +49,17 @@ def _prepare_master_training_frame(
             max_pairs=int(config["data"].get("weak_max_pairs", 2500)),
             low_ratio=float(config["data"].get("ratio_low", 0.12)),
             high_ratio=float(config["data"].get("ratio_high", 6.0)),
+            ne_lexicon=ne_lexicon,
         )
 
-    merged = pd.concat([sentence_df, weak_df], ignore_index=True)
+    dict_df = pd.DataFrame(columns=["source", "target", "group_id", "origin"])
+    if config["data"].get("use_dictionary_data", False):
+        dict_df = mine_dictionary_pairs(
+            ebl_dict_df=data_frames.get("ebl_dictionary"),
+            max_pairs=int(config["data"].get("dict_max_pairs", 3000)),
+        )
+
+    merged = pd.concat([sentence_df, weak_df, dict_df], ignore_index=True)
     merged = merged.drop_duplicates(subset=["source", "target"]).reset_index(drop=True)
     merged = filter_parallel_pairs(
         merged,
@@ -99,19 +109,20 @@ def _tokenize_dataset(
     tokenizer: AutoTokenizer,
     max_source_length: int,
     max_target_length: int,
+    task_prefix: str = "",
 ) -> Dataset:
     def _map(batch: Dict[str, List[str]]) -> Dict[str, Any]:
+        sources = [task_prefix + s for s in batch["source"]]
         model_inputs = tokenizer(
-            batch["source"],
+            sources,
             truncation=True,
             max_length=max_source_length,
         )
-        with tokenizer.as_target_tokenizer():
-            labels = tokenizer(
-                batch["target"],
-                truncation=True,
-                max_length=max_target_length,
-            )
+        labels = tokenizer(
+            batch["target"],
+            truncation=True,
+            max_length=max_target_length,
+        )
         model_inputs["labels"] = labels["input_ids"]
         return model_inputs
 
@@ -144,6 +155,7 @@ def _train_single_stage(
     output_dir: str,
     stage_cfg: Dict[str, Any],
     global_cfg: Dict[str, Any],
+    task_prefix: str = "",
 ) -> Tuple[str, float]:
     train_ds = Dataset.from_pandas(train_df[["source", "target"]], preserve_index=False)
     val_ds = Dataset.from_pandas(val_df[["source", "target"]], preserve_index=False)
@@ -153,12 +165,14 @@ def _train_single_stage(
         tokenizer,
         max_source_length=int(global_cfg["training"]["max_source_length"]),
         max_target_length=int(global_cfg["training"]["max_target_length"]),
+        task_prefix=task_prefix,
     )
     val_tok = _tokenize_dataset(
         val_ds,
         tokenizer,
         max_source_length=int(global_cfg["training"]["max_source_length"]),
         max_target_length=int(global_cfg["training"]["max_target_length"]),
+        task_prefix=task_prefix,
     )
 
     os.makedirs(output_dir, exist_ok=True)
@@ -178,7 +192,8 @@ def _train_single_stage(
         save_total_limit=int(global_cfg["training"].get("save_total_limit", 3)),
         predict_with_generate=True,
         generation_max_length=int(global_cfg["training"]["generation_max_length"]),
-        generation_num_beams=int(global_cfg["training"]["generation_num_beams"]),
+        generation_num_beams=int(global_cfg["training"].get("eval_generation_num_beams",
+                                    global_cfg["training"]["generation_num_beams"])),
         fp16=bool(global_cfg["training"].get("fp16", True)),
         load_best_model_at_end=True,
         metric_for_best_model="geo_mean",
@@ -219,9 +234,8 @@ def run_training(config: Dict[str, Any]) -> Dict[str, Any]:
 
     frames = load_competition_data(data_dir)
     lexicon = build_named_entity_lexicon(frames.get("oa_lexicon"))
-    del lexicon  # reserved for future constrained decoding hooks
 
-    master = _prepare_master_training_frame(frames, config)
+    master = _prepare_master_training_frame(frames, config, ne_lexicon=lexicon)
     master = build_group_folds(
         master,
         group_col="group_id",
@@ -250,10 +264,14 @@ def run_training(config: Dict[str, Any]) -> Dict[str, Any]:
     for model_cfg in config["models"]:
         model_name = model_cfg["name"]
         pretrained = model_cfg["pretrained_model_name"]
+        task_prefix = model_cfg.get("task_prefix", "")
         tokenizer = AutoTokenizer.from_pretrained(pretrained)
         model = AutoModelForSeq2SeqLM.from_pretrained(pretrained)
 
-        model_entry = {"name": model_name, "pretrained": pretrained, "stages": []}
+        if model_cfg.get("gradient_checkpointing", False):
+            model.gradient_checkpointing_enable()
+
+        model_entry = {"name": model_name, "pretrained": pretrained, "task_prefix": task_prefix, "stages": []}
         stage_train = train_master.copy()
 
         for stage in model_cfg["stages"]:
@@ -274,8 +292,11 @@ def run_training(config: Dict[str, Any]) -> Dict[str, Any]:
                 output_dir=stage_out,
                 stage_cfg=stage_cfg,
                 global_cfg=config,
+                task_prefix=task_prefix,
             )
             model = AutoModelForSeq2SeqLM.from_pretrained(checkpoint_dir)
+            if model_cfg.get("gradient_checkpointing", False):
+                model.gradient_checkpointing_enable()
 
             model_entry["stages"].append(
                 {

@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+import time
 from collections import defaultdict
 from typing import Any, Dict, List, Sequence
 
@@ -45,6 +46,7 @@ def _resolve_model_specs(
                     "name": m["name"],
                     "checkpoint": best_stage["checkpoint_dir"],
                     "weight": max(float(best_stage.get("val_geo_mean", 1.0)), 1e-6),
+                    "task_prefix": m.get("task_prefix", ""),
                 }
             )
         if specs:
@@ -53,7 +55,12 @@ def _resolve_model_specs(
     for m in config["models"]:
         manual_ckpt = m.get("checkpoint")
         if manual_ckpt:
-            specs.append({"name": m["name"], "checkpoint": manual_ckpt, "weight": 1.0})
+            specs.append({
+                "name": m["name"],
+                "checkpoint": manual_ckpt,
+                "weight": 1.0,
+                "task_prefix": m.get("task_prefix", ""),
+            })
     return specs
 
 
@@ -63,6 +70,7 @@ def _generate_candidates_for_model(
     sources: Sequence[str],
     gen_cfg: Dict[str, Any],
     batch_size: int,
+    task_prefix: str = "",
 ) -> List[List[Dict[str, float]]]:
     tokenizer = AutoTokenizer.from_pretrained(checkpoint)
     model = AutoModelForSeq2SeqLM.from_pretrained(checkpoint)
@@ -74,9 +82,11 @@ def _generate_candidates_for_model(
     num_beams = max(int(gen_cfg.get("num_beams", 4)), n_best)
     max_length = int(gen_cfg.get("max_target_length", 160))
     candidates: List[List[Dict[str, float]]] = []
+    total_batches = (len(sources) + batch_size - 1) // batch_size
 
-    for start in range(0, len(sources), batch_size):
-        batch = list(sources[start : start + batch_size])
+    for batch_idx, start in enumerate(range(0, len(sources), batch_size)):
+        t0 = time.time()
+        batch = [task_prefix + s for s in sources[start : start + batch_size]]
         enc = tokenizer(
             batch,
             padding=True,
@@ -93,6 +103,9 @@ def _generate_candidates_for_model(
                 num_beams=num_beams,
                 num_return_sequences=n_best,
                 max_length=max_length,
+                length_penalty=float(gen_cfg.get("length_penalty", 1.0)),
+                repetition_penalty=float(gen_cfg.get("repetition_penalty", 1.0)),
+                no_repeat_ngram_size=int(gen_cfg.get("no_repeat_ngram_size", 0)),
                 early_stopping=True,
                 return_dict_in_generate=True,
                 output_scores=True,
@@ -112,6 +125,13 @@ def _generate_candidates_for_model(
                     }
                 )
             candidates.append(row)
+
+        elapsed = time.time() - t0
+        done = min(start + batch_size, len(sources))
+        remaining = total_batches - batch_idx - 1
+        eta = elapsed * remaining
+        print(f"  [{model_name}] batch {batch_idx + 1}/{total_batches} "
+              f"({done}/{len(sources)} rows, {elapsed:.1f}s/batch, ETA {eta:.0f}s)")
 
     print(f"[inference] {model_name}: generated {len(candidates)} rows from {checkpoint}")
     return candidates
@@ -163,6 +183,7 @@ def run_inference(config: Dict[str, Any], summary_path: str = "") -> str:
             sources=sources,
             gen_cfg=config["inference"],
             batch_size=batch_size,
+            task_prefix=spec.get("task_prefix", ""),
         )
 
     final_predictions: List[str] = []
@@ -171,6 +192,7 @@ def run_inference(config: Dict[str, Any], summary_path: str = "") -> str:
         per_model_weights = []
         all_texts_for_rerank = []
         all_weights_for_rerank = []
+        all_beam_scores = []
 
         for spec in model_specs:
             row_candidates = all_candidates[spec["name"]][row_idx]
@@ -181,6 +203,7 @@ def run_inference(config: Dict[str, Any], summary_path: str = "") -> str:
             for cand in row_candidates:
                 all_texts_for_rerank.append(cand["text"])
                 all_weights_for_rerank.append(spec["norm_weight"])
+                all_beam_scores.append(cand.get("score", 0.0))
 
         if len(model_specs) == 1:
             selected = per_model_top[0]
@@ -190,6 +213,7 @@ def run_inference(config: Dict[str, Any], summary_path: str = "") -> str:
             selected = consensus_rerank(
                 candidates=all_texts_for_rerank,
                 model_weights=all_weights_for_rerank,
+                beam_scores=all_beam_scores,
                 bleu_weight=float(
                     config["inference"]["ensemble"]["rerank_weights"].get("bleu", 0.45)
                 ),
@@ -198,6 +222,9 @@ def run_inference(config: Dict[str, Any], summary_path: str = "") -> str:
                 ),
                 length_weight=float(
                     config["inference"]["ensemble"]["rerank_weights"].get("length", 0.10)
+                ),
+                beam_score_weight=float(
+                    config["inference"]["ensemble"]["rerank_weights"].get("beam_score", 0.15)
                 ),
             )
 

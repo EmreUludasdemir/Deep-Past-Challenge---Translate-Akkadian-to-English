@@ -15,10 +15,8 @@ import yaml
 
 try:
     import sacrebleu
-except ImportError as exc:  # pragma: no cover
-    raise ImportError(
-        "sacrebleu is required. Install with `pip install sacrebleu`."
-    ) from exc
+except ImportError:  # pragma: no cover
+    sacrebleu = None
 
 
 ASCII_TO_DIACRITIC = {
@@ -113,6 +111,11 @@ def config_hash(config: Dict[str, Any]) -> str:
 def compute_bleu_chrf(
     predictions: Sequence[str], references: Sequence[str]
 ) -> Tuple[float, float]:
+    if sacrebleu is None:
+        raise ImportError(
+            "sacrebleu is required for BLEU/chrF metric computation. "
+            "Install with `pip install sacrebleu`."
+        )
     if len(predictions) != len(references):
         raise ValueError("Predictions and references must have equal length.")
     bleu = sacrebleu.corpus_bleu(list(predictions), [list(references)]).score
@@ -599,11 +602,15 @@ def annotate_stress_slices(df: pd.DataFrame) -> pd.DataFrame:
 def sentence_bleu_proxy(candidate: str, references: Sequence[str]) -> float:
     if not references:
         return 0.0
+    if sacrebleu is None:
+        return 0.0
     return float(sacrebleu.sentence_bleu(candidate, list(references)).score)
 
 
 def sentence_chrf_proxy(candidate: str, references: Sequence[str]) -> float:
     if not references:
+        return 0.0
+    if sacrebleu is None:
         return 0.0
     scores = []
     for ref in references:

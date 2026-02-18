@@ -122,6 +122,7 @@ Notes:
 - `kaggle_submit.py` ignores `training_summary.json` inside `--weights-dir` by default.
 - To force summary-based checkpoint resolution, pass `--use-weights-summary`.
 - If a checkpoint path error occurs, verify the folder name exactly matches model names in config (baseline: `byt5_small_baseline`).
+- `sacrebleu` is optional for baseline inference-only, but required for training metrics and BLEU/chrF reranking workflows.
 
 ## Reproducibility and Validation
 

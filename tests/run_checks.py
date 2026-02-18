@@ -1,5 +1,6 @@
 import os
 import sys
+import tempfile
 
 import pandas as pd
 
@@ -7,6 +8,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
+from kaggle_submit import _bind_checkpoints_from_weights_dir, _is_hf_checkpoint_dir
 from utils import (
     canonicalize_text,
     consensus_rerank,
@@ -15,6 +17,11 @@ from utils import (
     run_metric_fixture,
     validate_submission_df,
 )
+
+
+def _touch(path: str) -> None:
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("{}")
 
 
 def test_metric_fixture() -> None:
@@ -98,6 +105,33 @@ def test_consensus_rerank_with_beam_scores() -> None:
     assert len(result) > 0
 
 
+def test_hf_checkpoint_layout_check() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        ckpt = os.path.join(tmp, "byt5_small_baseline")
+        os.makedirs(ckpt, exist_ok=True)
+        assert not _is_hf_checkpoint_dir(ckpt)
+
+        _touch(os.path.join(ckpt, "config.json"))
+        _touch(os.path.join(ckpt, "model.safetensors"))
+        _touch(os.path.join(ckpt, "tokenizer_config.json"))
+        assert _is_hf_checkpoint_dir(ckpt)
+
+
+def test_bind_checkpoints_from_weights_dir() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        ckpt = os.path.join(tmp, "byt5_small_baseline")
+        os.makedirs(ckpt, exist_ok=True)
+        _touch(os.path.join(ckpt, "config.json"))
+        _touch(os.path.join(ckpt, "model.safetensors"))
+        _touch(os.path.join(ckpt, "tokenizer_config.json"))
+
+        config = {"models": [{"name": "byt5_small_baseline"}]}
+        bound, issues = _bind_checkpoints_from_weights_dir(config, tmp)
+        assert bound == ["byt5_small_baseline"]
+        assert not issues
+        assert config["models"][0]["checkpoint"] == ckpt
+
+
 def main() -> None:
     test_metric_fixture()
     test_preprocessing_cases()
@@ -108,6 +142,8 @@ def main() -> None:
     test_dictionary_mining_empty()
     test_dictionary_mining_with_data()
     test_consensus_rerank_with_beam_scores()
+    test_hf_checkpoint_layout_check()
+    test_bind_checkpoints_from_weights_dir()
     print("All tests passed.")
 
 

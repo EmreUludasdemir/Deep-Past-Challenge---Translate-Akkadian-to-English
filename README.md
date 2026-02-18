@@ -75,6 +75,54 @@ python train.py --config configs/baseline.yaml --smoke
 python inference.py --config configs/baseline.yaml --summary /kaggle/working/outputs/baseline/training_summary.json
 ```
 
+## Kaggle Offline (Baseline, Inference-Only)
+
+Recommended offline path for code competition notebooks:
+
+- `track=baseline`
+- `--inference-only`
+- weights mounted as a Kaggle Dataset
+
+Expected paths:
+
+- Competition data: `/kaggle/input/deep-past-initiative-machine-translation`
+- Weights root: `/kaggle/input/<weights_dataset>`
+- Baseline checkpoint folder: `/kaggle/input/<weights_dataset>/byt5_small_baseline`
+
+Notebook bootstrap:
+
+```bash
+!cp -r /kaggle/input/<code_dataset>/* /kaggle/working/
+%cd /kaggle/working
+!python kaggle_submit.py --help
+```
+
+Smoke run:
+
+```bash
+!python kaggle_submit.py --track baseline --inference-only --weights-dir /kaggle/input/<weights_dataset> --smoke
+```
+
+Full run:
+
+```bash
+!python kaggle_submit.py --track baseline --inference-only --weights-dir /kaggle/input/<weights_dataset>
+```
+
+Output checks:
+
+```bash
+!ls -lah /kaggle/working
+!ls -lah /kaggle/working/baseline
+!head -n 5 /kaggle/working/submission.csv
+```
+
+Notes:
+
+- `kaggle_submit.py` ignores `training_summary.json` inside `--weights-dir` by default.
+- To force summary-based checkpoint resolution, pass `--use-weights-summary`.
+- If a checkpoint path error occurs, verify the folder name exactly matches model names in config (baseline: `byt5_small_baseline`).
+
 ## Reproducibility and Validation
 
 - Seeded training (`global.seed` in config)

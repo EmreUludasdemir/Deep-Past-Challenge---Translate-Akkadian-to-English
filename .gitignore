@@ -1,0 +1,8 @@
+# Local packaging artifacts for Kaggle uploads
+*kaggle.zip
+deep-past-code-dataset.zip
+deep-past-weights-dataset-template.zip
+
+# Python runtime artifacts
+__pycache__/
+*.pyc

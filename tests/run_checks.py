@@ -9,6 +9,7 @@ if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
 from kaggle_submit import _bind_checkpoints_from_weights_dir, _is_hf_checkpoint_dir
+from inference import _tokenizer_compat_kwargs
 from utils import (
     canonicalize_text,
     consensus_rerank,
@@ -135,6 +136,20 @@ def test_bind_checkpoints_from_weights_dir() -> None:
         assert config["models"][0]["checkpoint"] == ckpt
 
 
+def test_tokenizer_compat_kwargs_for_list_extra_special_tokens() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        ckpt = os.path.join(tmp, "byt5_small_baseline")
+        os.makedirs(ckpt, exist_ok=True)
+        cfg_path = os.path.join(ckpt, "tokenizer_config.json")
+        with open(cfg_path, "w", encoding="utf-8") as f:
+            f.write('{"extra_special_tokens": ["<extra_id_0>", "<extra_id_1>"]}')
+
+        kwargs = _tokenizer_compat_kwargs(ckpt)
+        assert "extra_special_tokens" in kwargs
+        assert kwargs["extra_special_tokens"]["extra_id_0"] == "<extra_id_0>"
+        assert kwargs["extra_special_tokens"]["extra_id_1"] == "<extra_id_1>"
+
+
 def main() -> None:
     test_metric_fixture()
     test_preprocessing_cases()
@@ -147,6 +162,7 @@ def main() -> None:
     test_consensus_rerank_with_beam_scores()
     test_hf_checkpoint_layout_check()
     test_bind_checkpoints_from_weights_dir()
+    test_tokenizer_compat_kwargs_for_list_extra_special_tokens()
     print("All tests passed.")
 
 

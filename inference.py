@@ -22,6 +22,28 @@ from utils import (
 )
 
 
+def _tokenizer_compat_kwargs(checkpoint: str) -> Dict[str, Any]:
+    """
+    Build compatibility kwargs for tokenizer loading.
+
+    Some checkpoints contain `extra_special_tokens` as a list in
+    tokenizer_config.json, while newer Transformers versions expect a dict.
+    """
+    cfg_path = os.path.join(checkpoint, "tokenizer_config.json")
+    if not os.path.exists(cfg_path):
+        return {}
+    try:
+        with open(cfg_path, "r", encoding="utf-8") as f:
+            cfg = json.load(f)
+    except Exception:
+        return {}
+
+    extra = cfg.get("extra_special_tokens")
+    if isinstance(extra, list):
+        return {"extra_special_tokens": {f"extra_id_{i}": tok for i, tok in enumerate(extra)}}
+    return {}
+
+
 def _normalize_weights(raw_weights: Sequence[float]) -> List[float]:
     if not raw_weights:
         return []
@@ -72,7 +94,8 @@ def _generate_candidates_for_model(
     batch_size: int,
     task_prefix: str = "",
 ) -> List[List[Dict[str, float]]]:
-    tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+    tok_kwargs = _tokenizer_compat_kwargs(checkpoint)
+    tokenizer = AutoTokenizer.from_pretrained(checkpoint, **tok_kwargs)
     model = AutoModelForSeq2SeqLM.from_pretrained(checkpoint)
     model.eval()
     if torch.cuda.is_available():

@@ -124,6 +124,21 @@ Notes:
 - If a checkpoint path error occurs, verify the folder name exactly matches model names in config (baseline: `byt5_small_baseline`).
 - `sacrebleu` is optional for baseline inference-only, but required for training metrics and BLEU/chrF reranking workflows.
 
+### Publish updated code dataset (without committing secrets)
+
+Use environment-based auth (recommended: `KAGGLE_API_TOKEN`) and publish a new
+version for your existing code dataset:
+
+```bash
+python scripts/publish_kaggle_code_dataset.py --dataset-id emreuludasdemir/deep-past-codev1 --message "tokenizer compatibility fix"
+```
+
+Dry-run:
+
+```bash
+python scripts/publish_kaggle_code_dataset.py --dry-run
+```
+
 ## Reproducibility and Validation
 
 - Seeded training (`global.seed` in config)

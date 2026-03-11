@@ -3,6 +3,21 @@
 deep-past-code-dataset.zip
 deep-past-weights-dataset-template.zip
 
+# Local Kaggle scratch/work dirs
+.kaggle_tmp/
+.kaggle_lb/
+.kaggle_kernel_pull/
+
 # Python runtime artifacts
 __pycache__/
 *.pyc
+.mypy_cache/
+
+# Local investigation / scraped artifacts
+dump_*.html
+_competition.json
+_hdr.txt
+_k_*.html
+_k_app.js
+_resp.json
+desktop.ini

@@ -123,6 +123,92 @@ Notes:
 - To force summary-based checkpoint resolution, pass `--use-weights-summary`.
 - If a checkpoint path error occurs, verify the folder name exactly matches model names in config (baseline: `byt5_small_baseline`).
 - `sacrebleu` is optional for baseline inference-only, but required for training metrics and BLEU/chrF reranking workflows.
+- `inference.py` supports optional diverse beam decoding via `inference.diverse_decoding` in YAML.
+- Ensemble method can be set with `inference.ensemble.method`: `weighted_vote`, `majority_vote`, `longest`, `shortest`, or `consensus_rerank`.
+
+## Kaggle Direct Paste (No code-dataset packaging)
+
+If you want to **copy-paste and run directly in Kaggle** (without uploading this repo as a
+Kaggle code dataset), use:
+
+- `kaggle_direct_notebook.py`
+
+Example in notebook:
+
+```bash
+!python -V
+!python kaggle_direct_notebook.py --mode full
+```
+
+Outputs:
+
+- `/kaggle/working/submission.csv`
+
+Notes:
+
+- Uses competition data from `/kaggle/input/deep-past-initiative-machine-translation`.
+- Trains models inside notebook runtime and then runs weighted ensemble inference.
+- Includes source-side variant voting (`canonical/raw/no_determinatives`) to improve robustness.
+
+For a literal **single-cell** copy/paste template, see:
+
+- `notebooks/kaggle_one_cell.md`
+
+## Kaggle Direct Paste (No code-dataset packaging)
+
+If you want to **copy-paste and run directly in Kaggle** (without uploading this repo as a
+Kaggle code dataset), use:
+
+- `kaggle_direct_notebook.py`
+
+Example in notebook:
+
+```bash
+!python -V
+!python kaggle_direct_notebook.py --mode full
+```
+
+Outputs:
+
+- `/kaggle/working/submission.csv`
+
+Notes:
+
+- Uses competition data from `/kaggle/input/deep-past-initiative-machine-translation`.
+- Trains models inside notebook runtime and then runs weighted ensemble inference.
+- Includes source-side variant voting (`canonical/raw/no_determinatives`) to improve robustness.
+
+For a literal **single-cell** copy/paste template, see:
+
+- `notebooks/kaggle_one_cell.md`
+
+## Kaggle Direct Paste (No code-dataset packaging)
+
+If you want to **copy-paste and run directly in Kaggle** (without uploading this repo as a
+Kaggle code dataset), use:
+
+- `kaggle_direct_notebook.py`
+
+Example in notebook:
+
+```bash
+!python -V
+!python kaggle_direct_notebook.py --mode full
+```
+
+Outputs:
+
+- `/kaggle/working/submission.csv`
+
+Notes:
+
+- Uses competition data from `/kaggle/input/deep-past-initiative-machine-translation`.
+- Trains models inside notebook runtime and then runs weighted ensemble inference.
+- Includes source-side variant voting (`canonical/raw/no_determinatives`) to improve robustness.
+
+For a literal **single-cell** copy/paste template, see:
+
+- `notebooks/kaggle_one_cell.md`
 
 ### Publish updated code dataset (without committing secrets)
 

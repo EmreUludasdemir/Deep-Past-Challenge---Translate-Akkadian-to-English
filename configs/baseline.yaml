@@ -60,6 +60,10 @@ inference:
   length_penalty: 1.2
   repetition_penalty: 1.2
   no_repeat_ngram_size: 0
+  diverse_decoding:
+    enabled: false
+    num_beam_groups: 1
+    diversity_penalty: 0.0
   enable_entity_repair: true
   ensemble:
     method: weighted_vote

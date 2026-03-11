@@ -9,7 +9,11 @@ if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
 from kaggle_submit import _bind_checkpoints_from_weights_dir, _is_hf_checkpoint_dir
-from inference import _tokenizer_compat_kwargs
+from inference import (
+    _build_generation_kwargs,
+    _postprocess_translation_candidate,
+    _tokenizer_compat_kwargs,
+)
 from utils import (
     canonicalize_text,
     consensus_rerank,
@@ -150,6 +154,34 @@ def test_tokenizer_compat_kwargs_for_list_extra_special_tokens() -> None:
         assert kwargs["extra_special_tokens"]["extra_id_1"] == "<extra_id_1>"
 
 
+def test_build_generation_kwargs_with_diverse_decoding() -> None:
+    cfg = {
+        "num_beams": 5,
+        "max_target_length": 192,
+        "length_penalty": 1.1,
+        "repetition_penalty": 1.0,
+        "no_repeat_ngram_size": 0,
+        "diverse_decoding": {
+            "enabled": True,
+            "num_beam_groups": 5,
+            "diversity_penalty": 0.3,
+        },
+    }
+    kwargs = _build_generation_kwargs(cfg, n_best=5)
+    assert kwargs["num_beams"] == 5
+    assert kwargs["num_return_sequences"] == 5
+    assert kwargs["num_beam_groups"] == 5
+    assert abs(kwargs["diversity_penalty"] - 0.3) < 1e-12
+
+
+def test_postprocess_translation_candidate() -> None:
+    raw = "translate Akkadian to English: silver silver , is sent ."
+    out = _postprocess_translation_candidate(raw)
+    assert not out.lower().startswith("translate akkadian to english:")
+    assert "silver silver" not in out.lower()
+    assert ", " in out or "," in out
+
+
 def main() -> None:
     test_metric_fixture()
     test_preprocessing_cases()
@@ -163,6 +195,8 @@ def main() -> None:
     test_hf_checkpoint_layout_check()
     test_bind_checkpoints_from_weights_dir()
     test_tokenizer_compat_kwargs_for_list_extra_special_tokens()
+    test_build_generation_kwargs_with_diverse_decoding()
+    test_postprocess_translation_candidate()
     print("All tests passed.")
 
 
